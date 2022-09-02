@@ -14,15 +14,63 @@ def propagate1(wavel=1.55e-6,no=1,opl=1,Ein=np.array([[1],[0]])):
 
 
 
-def beamsplitter(PT=0.5,Ein=np.array([[1],[0]])):
+def dielectric_beamsplitter(PT=0.5,Ein=np.array([[1],[0]])):
+
+     phiT = 0
+     PhiR = 0
+     phiO = 0
+
+
+     T = np.sqrt(PT)
 
      PR = 1-PT
 
-     Theta1 = np.arctan(PR/PT) #Radian
+     R = np.sqrt(PR)
 
+     Theta1 = np.arctan(R/T) #Radian
+     
+     print('')
 
-     BS1 = np.array([[math.sin(Theta1),math.cos(Theta1)],[math.cos(Theta1),-1*math.sin(Theta1)]])
+     print('Theta1 = ')
+     print(Theta1)
+
+     print('')
+     
+     # https://en.wikipedia.org/wiki/Beam_splitter
+
+     deBS1 = np.array([[math.sin(Theta1),math.cos(Theta1)],[math.cos(Theta1),-1*math.sin(Theta1)]])
        
-     Eout=np.dot(BS1,Ein)
+     Eout = np.dot(deBS1,Ein)
+
+     return Eout
+
+
+ def Loudon_beamsplitter(PT=0.5,Ein=np.array([[1],[0]])):
+
+     phiT = 0
+     PhiR = -0.5*np.pi
+     phiO = 0.5 * np.pi
+
+
+     T = np.sqrt(PT)
+
+     PR = 1-PT
+
+     R = np.sqrt(PR)
+
+     Theta1 = np.arctan(R/T) #Radian
+     
+     print('')
+
+     print('Theta1 = ')
+     print(Theta1)
+
+     print('')
+     
+     # https://en.wikipedia.org/wiki/Beam_splitter
+
+     LoudonBS1 = np.array([[math.sin(Theta1),math.cos(Theta1)],[math.cos(Theta1),-1*math.sin(Theta1)]])
+       
+     Eout=np.dot(LoudonBS1,Ein)
 
      return Eout

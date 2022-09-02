@@ -12,8 +12,8 @@ print('')
 
 wavel = 1.55e-6
 no = 1
-ne = 1.1
-theta1 = 22.5
+#ne = 1.1
+#theta1 = 22.5
 opl = 9999
 
 
@@ -22,9 +22,9 @@ Ein1 = np.array([[1],[0]])
 Eout1 = mach_zender_interferometer_def.propagate1(wavel, no, opl, Ein1)
 
 
-PT = 0.9
+PT = 0.5
 
-Eout2 = mach_zender_interferometer_def.beamsplitter(PT, Eout1)
+Eout2 = mach_zender_interferometer_def.dielectric_beamsplitter(PT, Eout1)
 
 print('')
 
