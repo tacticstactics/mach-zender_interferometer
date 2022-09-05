@@ -12,18 +12,20 @@ def propagate1(wavel=1.55e-6,no=1, opl1=1, opl2=1, Ein=np.array([[1],[0]])):
     Eout = np.dot(propagatematrix1,Ein)
 
     #Pout = np.array([[],[]])
-
-
+    
     return Eout
 
 
 
 def dielectric_beamsplitter(PT,Ein):
 
+    #Dielectric
      phiT = 0
      phiR = 0
      phiO = 0
 
+
+     #Symmetric
      #phiT = 0
      #phiR = -0.5*np.pi
      #phiO = 0.5 * np.pi
@@ -46,7 +48,7 @@ def dielectric_beamsplitter(PT,Ein):
      # https://en.wikipedia.org/wiki/Beam_splitter
 
      
-     dielectricBS1 = np.dot(np.exp(-1J * phiO),np.array([[math.sin(Theta1)*np.exp(1J * phiR),math.cos(Theta1)*np.exp(-1J * phiT)],[math.cos(Theta1)*np.exp(1j * phiT),-1*math.sin(Theta1)*np.exp(-1J * phiR)]]))
+     dielectricBS1 = np.dot(np.exp(1J*phiO),np.array([[math.sin(Theta1)*np.exp(1J*phiR),math.cos(Theta1)*np.exp(-1J*phiT)],[math.cos(Theta1)*np.exp(1j*phiT),-1*math.sin(Theta1)*np.exp(-1J*phiR)]]))
      
      print('')
      print('dielectricBS1 = ')
