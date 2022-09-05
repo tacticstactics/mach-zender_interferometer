@@ -88,7 +88,21 @@ print('')
 
 
 
-#power_1 = 
+power_1 = Ein6[0,0]
+print('power_1')
+print(power_1)
+
+power_11 = (abs(power_1))**2
+print('power_11')
+print(power_11)
+
+
+
+
+power_2 = Ein6[1,0]
+print('power_2')
+print(power_2)
+
 
 
 #fig = plt.figure(figsize = (10,6), facecolor='lightblue')
