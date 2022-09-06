@@ -22,15 +22,15 @@ def dielectric_beamsplitter(PT,Ein):
    # See Wikipedia for details. https://en.wikipedia.org/wiki/Beam_splitter       
 
     #Dielectric
-     phiT = 0
-     phiR = 0
-     phiO = 0
+     #phiT = 0
+     #phiR = 0
+     #phiO = 0
 
 
      #Symmetric
-     #phiT = 0
-     #phiR = -0.5*np.pi
-     #phiO = 0.5 * np.pi
+     phiT = 0
+     phiR = -0.5*np.pi
+     phiO = 0.5 * np.pi
 
 
      T = np.sqrt(PT)
