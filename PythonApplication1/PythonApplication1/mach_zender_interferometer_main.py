@@ -32,8 +32,7 @@ Ein1 = np.array([[1+0.0000j],[0-0.0000j]])
 #Ein1 = np.array([[0.707+0.707j],[0]])
 
 # Input Both 1 and 2 port
-#Ein1 = np.array([[0.707+0j],[-0.707-0j]]) 
-#Ein1 = np.array([[0.707+0.707j],[0.707-0.707j]]) #Both 1 and 2 port
+#Ein1 = np.array([[0.707+0.707j],[0.707+0.707j]]) #Both 1 and 2 port
 
 # Input Port 2 only
 #Ein1 = np.array([[0],[1]]) # 2 port only
