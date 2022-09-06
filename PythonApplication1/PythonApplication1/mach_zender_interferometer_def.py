@@ -5,9 +5,9 @@ import numpy as np
 
 
 
-def propagate1(wavel=1.55e-6,no=1, opl1=1, opl2=1, Ein=np.array([[1],[0]])):
+def propagate1(wl=0.633,no=1, opl1=1, opl2=1, Ein=np.array([[1],[0]])):
 
-    propagatematrix1 = np.array([[np.exp(1j*wavel*no*opl1),0],[0,np.exp(1j*wavel*no*opl2)]]);
+    propagatematrix1 = np.array([[np.exp(1j*wl*no*opl1),0],[0,np.exp(1j*wl*no*opl2)]]);
 
     Eout = np.dot(propagatematrix1,Ein)
 
@@ -17,20 +17,20 @@ def propagate1(wavel=1.55e-6,no=1, opl1=1, opl2=1, Ein=np.array([[1],[0]])):
 
 
 
-def dielectric_beamsplitter(PT,Ein):
+def beamsplitter(PT,Ein):
 
    # See Wikipedia for details. https://en.wikipedia.org/wiki/Beam_splitter       
 
     #Dielectric
-     phiT = 0
-     phiR = 0
-     phiO = 0
+     #phiT = 0
+     #phiR = 0
+     #phiO = 0
 
 
      #Symmetric
-     #phiT = 0
-     #phiR = -0.5*np.pi
-     #phiO = 0.5 * np.pi
+     phiT = 0
+     phiR = -0.5*np.pi
+     phiO = 0.5 * np.pi
 
 
      T = np.sqrt(PT)
