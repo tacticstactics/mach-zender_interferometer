@@ -10,5 +10,4 @@ Wavelength 2,4,6.. reflect the output beamsplitter.
 
 One of benefits is its flat phase response, which does not distort input pulse signal.
 
-![Figure_1](https://user-images.githubusercontent.com/30459885/188559150-91ab3780-1f21-40f2-82f8-0fe86d148117.png)
-
+![Figure_1](https://user-images.githubusercontent.com/30459885/189006751-49e320be-01f9-47a8-a14a-0e2835a4f676.png)
