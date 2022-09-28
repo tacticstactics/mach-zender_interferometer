@@ -28,7 +28,7 @@ def beamsplitter(PT,Ein):
 
      #Symmetric
      phiT = 0
-     phiR = -0.5*np.pi
+     phiR = -0.5 * np.pi    
      phiO = 0.5 * np.pi
 
 
