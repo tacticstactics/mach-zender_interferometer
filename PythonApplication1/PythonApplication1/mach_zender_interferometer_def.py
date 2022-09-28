@@ -32,11 +32,11 @@ def beamsplitter(PT,Ein):
      phiO = 0.5 * np.pi
 
 
-     T = np.sqrt(PT) # Transmission as Electric field
+     T = np.sqrt(PT) # Transmission defined as Electric field
 
-     PR = 1-PT # Reflection as Electric field
+     PR = 1-PT 
 
-     R = np.sqrt(PR)
+     R = np.sqrt(PR) # Reflection defined as Electric field
 
      Theta1 = np.arctan(R/T) #Radian   
          
