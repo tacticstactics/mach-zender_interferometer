@@ -31,12 +31,12 @@ PT2 = 0.5 # PT: Power Transmission of second beam splitter
 
 # Input Port 1 only
 #Ein1 = np.array([[1+0.0000j],[0-0.0000j]])
-Ein1 = np.array([[0.707+0.707j],[0]])
+#Ein1 = np.array([[0.707+0.707j],[0]])
 
 # Input Both 1 and 2 port
-#Ein1 = np.array([[1+0j],[1-0j]]) #Both 1 and 2 port
-#Ein1 = np.array([[0.707+0.707j],[-0.707-0.707j]]) #Both 1 and 2 port
-#Ein1 = np.array([[1 + 0j],[-1 - 0j]]) #Both 1 and 2 port
+#Ein1 = np.array([[1+0j],[1-0j]]) 
+Ein1 = np.array([[0.707+0.707j],[-0.707-0.707j]])
+#Ein1 = np.array([[1 + 0j],[-1 - 0j]])
 
 # Input Port 2 only
 #Ein1 = np.array([[0],[1]]) 
