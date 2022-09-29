@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import mach_zender_interferometer_def
 
 print('')
-print('mach-zender_interferometer_timedomain.py')
+print('mach-zender_interferometer_time_main.py')
 print('')
 
 

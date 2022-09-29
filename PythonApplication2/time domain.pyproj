@@ -5,7 +5,7 @@
     <ProjectGuid>bce3b09c-8a89-4342-96ff-07c8e6bfa29e</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>PythonApplication2.py</StartupFile>
+    <StartupFile>mach_zender_interferometer_time_main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,7 +23,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="mach_zender_interferometer_def.py" />
-    <Compile Include="PythonApplication2.py" />
+    <Compile Include="mach_zender_interferometer_time_main.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
