@@ -5,7 +5,7 @@
     <ProjectGuid>3e97f2ec-610d-46a0-84a3-7a4a66d1e74b</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>mach_zender_interferometer_main.py</StartupFile>
+    <StartupFile>mach_zender_interferometer_wavelgnth_main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,7 +23,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="mach_zender_interferometer_def.py" />
-    <Compile Include="mach_zender_interferometer_main.py" />
+    <Compile Include="mach_zender_interferometer_wavelgnth_main.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

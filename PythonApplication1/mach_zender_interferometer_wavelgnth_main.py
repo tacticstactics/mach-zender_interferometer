@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import mach_zender_interferometer_def
 
 print('')
-print('mach-zender_interferometer_main.py')
+print('mach-zender_interferometer_wavelength_main.py')
 print('')
 
 m = 512
@@ -18,7 +18,7 @@ oplcommon1=100 #Common Path Length 1
 oplcommon2=100 #Common Path Length 2
 
 opl1 =100 
-opl2= 5000
+opl2= 1000
 # Optical Path Length Difference (opl1-opl2) determines free spectral range as optical filter.
 
 wl0 = 0.633; #wavelength in um

@@ -10,11 +10,9 @@ print('')
 print('mach-zender_interferometer_timedomain.py')
 print('')
 
-m = 512
 
 
-samplerate = 4096
-# サンプリング周波数
+samplerate = 2048 # Sampling Frequency
 
 
 #len_wave = len(wave)
@@ -53,31 +51,29 @@ Ein1 = np.array([[1+0.0000j],[0-0.0000j]])
 #Ein1 = np.array([[0],[1]]) 
 #Ein1 = np.array([[0],[0.707+0.707j]])
 
-tcol = np.zeros((samplerate,1));
-signalcol = np.zeros((samplerate,1));
+tcol = np.zeros(samplerate);
+signalcol = np.zeros(samplerate);
 
-P1_powercol = np.zeros((samplerate,1));
-P1_phasecol = np.zeros((samplerate,1));
+P1_powercol = np.zeros(samplerate);
+P1_phasecol = np.zeros(samplerate);
 
-P2_powercol = np.zeros((samplerate,1));
-P2_phasecol = np.zeros((samplerate,1));
+P2_powercol = np.zeros(samplerate);
+P2_phasecol = np.zeros(samplerate);
 
 stept = 1/samplerate
 
-amp_c = 1                                                       # キャリア振幅
-freq_c = 10                                                     # キャリア周波数
-freq_am = 2                                                     # 変調周波数
-md = 0.9                                                         # 振幅変調指数(0<=m<=1)
+amp_c = 2.5                                                       # キャリア振幅
+freq_am = 5                                                     # 変調周波数
+md = 1                                                         # 振幅変調指数(0<=m<=1)
+dcc = 2.1
 
 for ii in range(samplerate):
     
     t = stept * ii
-    tcol[(ii)] = t
+    tcol[ii] = t
 
-    signal = np.sin(2 * np.pi * freq_am * t)                             # 変調波(<=1)
-    signalcol[(ii)] = signal
-
-    wave = amp_c * (1 + md * signal) * np.cos(2 * np.pi * freq_c * t) 
+    signal = amp_c * np.sin(2 * np.pi * freq_am * t) + dcc                             # 変調波(<=1)
+    signalcol[ii] = signal  
     
     Eout1 = mach_zender_interferometer_def.propagate1(wl, no, oplcommon1, oplcommon2, Ein1)
     Ein2 = Eout1
@@ -85,7 +81,7 @@ for ii in range(samplerate):
     Eout2 = mach_zender_interferometer_def.beamsplitter(PT1, Ein2)
     Ein3 = Eout2
     
-    Eout3 = mach_zender_interferometer_def.propagate1(wl, no, opl1, opl2+wave, Ein3) # Each path experience differnt path length
+    Eout3 = mach_zender_interferometer_def.propagate1(wl, no, opl1, opl2+signal, Ein3) # Each path experience differnt path length
     Ein4 = Eout3
     
     Eout4 = mach_zender_interferometer_def.beamsplitter(PT2, Ein4) # Each path enter second beam splitter
@@ -96,37 +92,41 @@ for ii in range(samplerate):
     
     Eout_port1 = Ein6[0,0] 
     power_11 = (np.abs(Eout_port1))**2 # Optical power is calculated as square of absolute electric field strength
-    P1_powercol[(ii)] = power_11
+    P1_powercol[ii] = power_11
     
     P1_phase = cmath.phase(power_11)
-    P1_phasecol[(ii)] = P1_phase
+    P1_phasecol[ii] = P1_phase
     
     Eout_port_2 = Ein6[1,0]
     power_22 = (np.abs(Eout_port_2))**2
     
-    P2_powercol[(ii)] = power_22
+    P2_powercol[ii] = power_22
     
     P2_phase = cmath.phase(power_22)
-    P2_phasecol[(ii)] = P2_phase
+    P2_phasecol[ii] = P2_phase
  
  
 
-fig = plt.figure(figsize = (10,4), facecolor='lightblue')
+fig = plt.figure(figsize = (10,6), facecolor='lightblue')
 
-ax1 = fig.add_subplot(1, 2, 1)
-ax2 = fig.add_subplot(1, 2, 2)
+ax1 = fig.add_subplot(3, 1, 1)
+ax2 = fig.add_subplot(3, 1, 2)
+ax3 = fig.add_subplot(3, 1, 3)
 
-ax1.plot(tcol,P1_powercol,tcol,P2_powercol)
-ax1.set_xlabel("time")
-ax1.set_ylabel("Power")
-ax1.set_ylim(0,2)
-ax1.grid()
+ax1.plot(tcol,signalcol)
+#ax1.set_ylim(-3,3)
 
-ax2.plot(tcol,P1_phasecol,tcol,P2_phasecol)
+ax2.plot(tcol,P1_powercol,tcol,P2_powercol)
 ax2.set_xlabel("time")
-ax2.set_ylabel("Phase")
-ax2.set_ylim(-2,2)
+ax2.set_ylabel("Power")
+ax2.set_ylim(0,1.1)
 ax2.grid()
+
+ax3.plot(tcol,P1_phasecol,tcol,P2_phasecol)
+ax3.set_xlabel("time")
+ax3.set_ylabel("Phase")
+ax3.set_ylim(-2,2)
+ax3.grid()
 
 plt.show()
 
