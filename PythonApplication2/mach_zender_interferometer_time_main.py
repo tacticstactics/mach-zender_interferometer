@@ -10,16 +10,14 @@ print('')
 print('mach-zender_interferometer_time_main.py')
 print('')
 
-
-
 samplerate = 2048 # Sampling Frequency
 
+stept = 1/samplerate
 
-#len_wave = len(wave)
-#print('Length of wave = ')
-#print(len_wave)
-#print('')
-
+amp_c = 2.5
+freq_am = 5
+md = 1 # modulation depth. 1 = 100 %
+dc_offset = 2.1 # DC offset
 
 no = 1 # Refractive Index of medium
 
@@ -31,7 +29,6 @@ opl2= 100
 # Optical Path Length Difference (opl1-opl2) determines free spectral range as optical filter.
 
 wl = 0.633; #wavelength in um
-
 
 PT1 = 0.5 # PT: Power Transmission of first beam splitter
 PT2 = 0.5 # PT: Power Transmission of second beam splitter
@@ -51,28 +48,22 @@ Ein1 = np.array([[1+0.0000j],[0-0.0000j]])
 #Ein1 = np.array([[0],[1]]) 
 #Ein1 = np.array([[0],[0.707+0.707j]])
 
-tcol = np.zeros(samplerate);
-signalcol = np.zeros(samplerate);
+tcol = np.zeros(samplerate)
+signalcol = np.zeros(samplerate)
 
-P1_powercol = np.zeros(samplerate);
-P1_phasecol = np.zeros(samplerate);
+P1_powercol = np.zeros(samplerate)
+P1_phasecol = np.zeros(samplerate)
 
-P2_powercol = np.zeros(samplerate);
-P2_phasecol = np.zeros(samplerate);
+P2_powercol = np.zeros(samplerate)
+P2_phasecol = np.zeros(samplerate)
 
-stept = 1/samplerate
-
-amp_c = 2.5                                                       # キャリア振幅
-freq_am = 5                                                     # 変調周波数
-md = 1                                                         # 振幅変調指数(0<=m<=1)
-dcc = 2.1
 
 for ii in range(samplerate):
     
     t = stept * ii
     tcol[ii] = t
 
-    signal = amp_c * np.sin(2 * np.pi * freq_am * t) + dcc                             # 変調波(<=1)
+    signal = amp_c * np.sin(2 * np.pi * freq_am * t) + dc_offset
     signalcol[ii] = signal  
     
     Eout1 = mach_zender_interferometer_def.propagate1(wl, no, oplcommon1, oplcommon2, Ein1)
@@ -81,7 +72,7 @@ for ii in range(samplerate):
     Eout2 = mach_zender_interferometer_def.beamsplitter(PT1, Ein2)
     Ein3 = Eout2
     
-    Eout3 = mach_zender_interferometer_def.propagate1(wl, no, opl1, opl2+signal, Ein3) # Each path experience differnt path length
+    Eout3 = mach_zender_interferometer_def.propagate1(wl, no, opl1, opl2+signal, Ein3) # Each path experience different path length
     Ein4 = Eout3
     
     Eout4 = mach_zender_interferometer_def.beamsplitter(PT2, Ein4) # Each path enter second beam splitter

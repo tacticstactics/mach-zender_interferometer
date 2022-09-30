@@ -10,8 +10,6 @@ def propagate1(wl=0.633,no=1, opl1=1, opl2=1, Ein=np.array([[1],[0]])):
     propagatematrix1 = np.array([[np.exp(1j*wl*no*opl1),0],[0,np.exp(1j*wl*no*opl2)]]);
 
     Eout = np.dot(propagatematrix1,Ein)
-
-    #Pout = np.array([[],[]])
     
     return Eout
 
@@ -41,8 +39,8 @@ def beamsplitter(PT,Ein):
 
      Theta1 = np.arctan(R/T) #Radian   
          
-     dielectricBS1 = np.dot(np.exp(1J*phiO),np.array([[math.sin(Theta1)*np.exp(1J*phiR),math.cos(Theta1)*np.exp(-1J*phiT)],[math.cos(Theta1)*np.exp(1j*phiT),-1*math.sin(Theta1)*np.exp(-1J*phiR)]]))
+     BSmatrix1 = np.dot(np.exp(1J*phiO),np.array([[math.sin(Theta1)*np.exp(1J*phiR),math.cos(Theta1)*np.exp(-1J*phiT)],[math.cos(Theta1)*np.exp(1j*phiT),-1*math.sin(Theta1)*np.exp(-1J*phiR)]]))
      
-     Eout = np.dot(dielectricBS1,Ein)
+     Eout = np.dot(BSmatrix1, Ein)
 
      return Eout
