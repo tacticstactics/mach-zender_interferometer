@@ -2,7 +2,7 @@
 
 Mach Zender Interferometer consists of two beam splitter and two mirrors.
 
-The interferomter can also be considered as a simpple optical filter:
+The interferomter can be considered as a simpple optical filter:
 
 Wavelgnth 1,3 5...transmit ouput beamsplitter.
 
