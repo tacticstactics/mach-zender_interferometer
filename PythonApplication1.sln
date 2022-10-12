@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.32804.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "wavelength division", "PythonApplication1\wavelength division.pyproj", "{3E97F2EC-610D-46A0-84A3-7A4A66D1E74B}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "time domain", "time\time domain.pyproj", "{BCE3B09C-8A89-4342-96FF-07C8E6BFA29E}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "time domain", "PythonApplication2\time domain.pyproj", "{BCE3B09C-8A89-4342-96FF-07C8E6BFA29E}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "wavelength division", "wavelength\wavelength division.pyproj", "{3E97F2EC-610D-46A0-84A3-7A4A66D1E74B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3E97F2EC-610D-46A0-84A3-7A4A66D1E74B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E97F2EC-610D-46A0-84A3-7A4A66D1E74B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCE3B09C-8A89-4342-96FF-07C8E6BFA29E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BCE3B09C-8A89-4342-96FF-07C8E6BFA29E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E97F2EC-610D-46A0-84A3-7A4A66D1E74B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E97F2EC-610D-46A0-84A3-7A4A66D1E74B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

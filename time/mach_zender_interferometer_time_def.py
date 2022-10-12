@@ -1,5 +1,5 @@
 
-#mach_zender_interferometer_def.py
+#mach_zender_interferometer_time_def.py
 
 import math
 import numpy as np

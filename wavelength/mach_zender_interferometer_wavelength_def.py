@@ -1,4 +1,4 @@
-#mach_zender_interferometer_def.py
+#mach_zender_interferometer_wavelegnth_def.py
 
 import math
 import numpy as np
@@ -20,28 +20,28 @@ def beamsplitter(PT,Ein):
 
    # See Wikipedia for details. https://en.wikipedia.org/wiki/Beam_splitter       
 
-    #Dielectric
+    #Dielectric Beam Splitter
      #phiT = 0
      #phiR = 0
      #phiO = 0
 
 
-     #Symmetric
+     #Symmetric Beam Splitter
      phiT = 0
      phiR = -0.5 * np.pi    
      phiO = 0.5 * np.pi
 
 
-     T = np.sqrt(PT) # Transmission defined as Electric field
+     T = np.sqrt(PT) # T: Transmission defined as Electric field
 
-     PR = 1-PT 
+     PR = 1-PT # PT: Power Transmission. PR: Power Reflection
 
-     R = np.sqrt(PR) # Reflection defined as Electric field
+     R = np.sqrt(PR) # R: Reflection defined as Electric field
 
      Theta1 = np.arctan(R/T) #Radian   
          
-     dielectricBS1 = np.dot(np.exp(1J*phiO),np.array([[math.sin(Theta1)*np.exp(1J*phiR),math.cos(Theta1)*np.exp(-1J*phiT)],[math.cos(Theta1)*np.exp(1j*phiT),-1*math.sin(Theta1)*np.exp(-1J*phiR)]]))
+     BS1 = np.dot(np.exp(1J*phiO),np.array([[math.sin(Theta1)*np.exp(1J*phiR),math.cos(Theta1)*np.exp(-1J*phiT)],[math.cos(Theta1)*np.exp(1j*phiT),-1*math.sin(Theta1)*np.exp(-1J*phiR)]]))
      
-     Eout = np.dot(dielectricBS1,Ein)
+     Eout = np.dot(BS1,Ein)
 
      return Eout

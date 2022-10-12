@@ -4,7 +4,7 @@ import math
 import cmath
 import matplotlib.pyplot as plt
 
-import mach_zender_interferometer_def
+import mach_zender_interferometer_time_def
 
 print('')
 print('mach-zender_interferometer_time_main.py')
@@ -66,19 +66,19 @@ for ii in range(samplerate):
     signal = amp_c * np.sin(2 * np.pi * freq_am * t) + dc_offset
     signalcol[ii] = signal  
     
-    Eout1 = mach_zender_interferometer_def.propagate1(wl, no, oplcommon1, oplcommon2, Ein1)
+    Eout1 = mach_zender_interferometer_time_def.propagate1(wl, no, oplcommon1, oplcommon2, Ein1)
     Ein2 = Eout1
     
-    Eout2 = mach_zender_interferometer_def.beamsplitter(PT1, Ein2)
+    Eout2 = mach_zender_interferometer_time_def.beamsplitter(PT1, Ein2)
     Ein3 = Eout2
     
-    Eout3 = mach_zender_interferometer_def.propagate1(wl, no, opl1, opl2+signal, Ein3) # Each path experience different path length
+    Eout3 = mach_zender_interferometer_time_def.propagate1(wl, no, opl1, opl2+signal, Ein3) # Each path experience different path length
     Ein4 = Eout3
     
-    Eout4 = mach_zender_interferometer_def.beamsplitter(PT2, Ein4) # Each path enter second beam splitter
+    Eout4 = mach_zender_interferometer_time_def.beamsplitter(PT2, Ein4) # Each path enter second beam splitter
     Ein5 = Eout4
     
-    Eout5 = mach_zender_interferometer_def.propagate1(wl, no, oplcommon1, oplcommon2, Ein5)
+    Eout5 = mach_zender_interferometer_time_def.propagate1(wl, no, oplcommon1, oplcommon2, Ein5)
     Ein6 = Eout5
     
     Eout_port1 = Ein6[0,0] 
