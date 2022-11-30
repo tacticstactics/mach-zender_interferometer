@@ -12,7 +12,7 @@ One of benefits is its flat phase response, which does not distort input pulse s
 
 ![Figure_1](https://user-images.githubusercontent.com/30459885/189006751-49e320be-01f9-47a8-a14a-0e2835a4f676.png)
 
-The other application intensity modulator by tuning arm length. it is used as external intensity modulator,
+The other application is intensity modulator by tuning optical length of one arm.
 
 ![Figure_1](https://user-images.githubusercontent.com/30459885/192955783-c60ed208-33bc-4d89-ac04-d600198ea474.png)
 
