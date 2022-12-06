@@ -1,6 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\time",
+    "\\wavelength"
   ],
   "SelectedNode": "\\PythonApplication1.sln",
   "PreviewInSolutionExplorer": false
