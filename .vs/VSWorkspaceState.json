@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
+    "\\time",
     "\\wavelength"
   ],
-  "SelectedNode": "\\wavelength\\wavelength division.pyproj",
+  "SelectedNode": "\\wavelength",
   "PreviewInSolutionExplorer": false
 }
