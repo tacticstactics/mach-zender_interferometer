@@ -10,12 +10,12 @@ print('')
 print('mach-zender_interferometer_time_main.py')
 print('')
 
-samplerate = 2048 # Sampling Frequency
+samplerate = 2048 # Sampling Frequency. [Hz]
 
 stept = 1/samplerate
 
 amp_c = 2.5
-freq_am = 5
+freq_am = 5 # [Hz]
 md = 1 # modulation depth. 1 = 100 %
 dc_offset = 2.1 # DC offset
 
@@ -108,13 +108,13 @@ ax1.plot(tcol,signalcol)
 #ax1.set_ylim(-3,3)
 
 ax2.plot(tcol,P1_powercol,tcol,P2_powercol)
-ax2.set_xlabel("time")
+
 ax2.set_ylabel("Power")
 ax2.set_ylim(0,1.1)
 ax2.grid()
 
 ax3.plot(tcol,P1_phasecol,tcol,P2_phasecol)
-ax3.set_xlabel("time")
+ax3.set_xlabel("time [s]")
 ax3.set_ylabel("Phase")
 ax3.set_ylim(-2,2)
 ax3.grid()

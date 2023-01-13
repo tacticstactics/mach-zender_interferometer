@@ -19,13 +19,13 @@ def beamsplitter(PT,Ein):
 
    # See Wikipedia for details. https://en.wikipedia.org/wiki/Beam_splitter       
 
-    #Dielectric
+    #Dielectric Beamsplitter
      #phiT = 0
      #phiR = 0
      #phiO = 0
 
 
-     #Symmetric
+     #Symmetric Beamsplitter
      phiT = 0
      phiR = -0.5 * np.pi    
      phiO = 0.5 * np.pi

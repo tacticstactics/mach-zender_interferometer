@@ -23,7 +23,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="mach_zender_interferometer_time_def.py" />
-    <Compile Include="homodyne_main.py" />
     <Compile Include="mach_zender_interferometer_time_main.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
