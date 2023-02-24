@@ -1,7 +1,5 @@
 ﻿
 import numpy as np
-import math
-import cmath
 import matplotlib.pyplot as plt
 
 import mach_zender_interferometer_time_def
@@ -85,7 +83,7 @@ for ii in range(samplerate):
     power_11 = (np.abs(Eout_port1))**2 # Optical power is calculated as square of absolute electric field strength
     P1_powercol[ii] = power_11
     
-    P1_phase = cmath.phase(power_11)
+    P1_phase = np.angle(power_11)
     P1_phasecol[ii] = P1_phase
     
     Eout_port_2 = Ein6[1,0]
@@ -93,7 +91,7 @@ for ii in range(samplerate):
     
     P2_powercol[ii] = power_22
     
-    P2_phase = cmath.phase(power_22)
+    P2_phase = np.angle(power_22)
     P2_phasecol[ii] = P2_phase
  
  
@@ -115,7 +113,7 @@ ax2.grid()
 
 ax3.plot(tcol,P1_phasecol,tcol,P2_phasecol)
 ax3.set_xlabel("time [s]")
-ax3.set_ylabel("Phase")
+ax3.set_ylabel("Angle")
 ax3.set_ylim(-2,2)
 ax3.grid()
 

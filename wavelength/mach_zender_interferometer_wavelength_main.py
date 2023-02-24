@@ -1,9 +1,6 @@
 
 import numpy as np
-import math
-import cmath
 import matplotlib.pyplot as plt
-
 import mach_zender_interferometer_wavelength_def
 
 print('')
@@ -75,7 +72,7 @@ for ii in range(m):
  power_11 = (np.abs(Eout_port1))**2 # Optical power is calculated as square of absolute electric field strength
  P1_powercol[ii] = power_11
  
- P1_phase = cmath.phase(power_11)
+ P1_phase = np.angle(power_11)
  P1_phasecol[ii] = P1_phase
  
  Eout_port_2 = Ein6[1,0]
@@ -83,7 +80,7 @@ for ii in range(m):
  
  P2_powercol[ii] = power_22
 
- P2_phase = cmath.phase(power_22)
+ P2_phase = np.angle(power_22)
  P2_phasecol[ii] = P2_phase
  
  
@@ -101,7 +98,7 @@ ax1.grid()
 
 ax2.plot(wlcol,P1_phasecol,wlcol,P2_phasecol)
 ax2.set_xlabel("Wavelength")
-ax2.set_ylabel("Phase")
+ax2.set_ylabel("Angle")
 ax2.set_ylim(-2,2)
 ax2.grid()
 
