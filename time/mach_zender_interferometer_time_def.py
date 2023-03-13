@@ -1,7 +1,6 @@
 
 #mach_zender_interferometer_time_def.py
 
-import math
 import numpy as np
 
 
@@ -18,6 +17,8 @@ def propagate1(wl=0.633,no=1, opl1=1, opl2=1, Ein=np.array([[1],[0]])):
 def beamsplitter(PT,Ein):
 
    # See Wikipedia for details. https://en.wikipedia.org/wiki/Beam_splitter       
+
+    #Phi: Phase Shift
 
     #Dielectric Beamsplitter
      #phiT = 0
@@ -39,7 +40,7 @@ def beamsplitter(PT,Ein):
 
      Theta1 = np.arctan(R/T) #Radian   
          
-     BSmatrix1 = np.dot(np.exp(1J*phiO),np.array([[math.sin(Theta1)*np.exp(1J*phiR),math.cos(Theta1)*np.exp(-1J*phiT)],[math.cos(Theta1)*np.exp(1j*phiT),-1*math.sin(Theta1)*np.exp(-1J*phiR)]]))
+     BSmatrix1 = np.dot(np.exp(1J*phiO),np.array([[np.sin(Theta1)*np.exp(1J*phiR),np.cos(Theta1)*np.exp(-1J*phiT)],[np.cos(Theta1)*np.exp(1j*phiT),-1*np.sin(Theta1)*np.exp(-1J*phiR)]]))
      
      Eout = np.dot(BSmatrix1, Ein)
 

@@ -19,6 +19,14 @@ freq_am1 = 5 # [Hz]
 md = 1 # modulation depth. 1 = 100 %
 dc_offset1 = 2.1 # DC offset
 
+
+amp_c2 = 2.5
+freq_am2 = 5 # [Hz]
+md = 1 # modulation depth. 1 = 100 %
+dc_offset2 = 2.1 # DC offset
+
+
+
 no = 1 # Refractive Index of medium
 
 #
@@ -57,6 +65,7 @@ print(E1in)
 
 tcol = np.zeros(samplerate)
 signal1col = np.zeros(samplerate)
+signal2col = np.zeros(samplerate)
 
 P1_powercol = np.zeros(samplerate)
 P1_phasecol = np.zeros(samplerate)
@@ -70,8 +79,6 @@ for ii in range(samplerate):
     t = stept * ii
     tcol[ii] = t
 
-    signal1 = amp_c1 * np.sin(2 * np.pi * freq_am1 * t) + dc_offset1
-    signal1col[ii] = signal1  
     
     E1out = mach_zender_interferometer_time_def.propagate1(wl, no, oplcommon1, oplcommon2, E1in)
     E2in = E1out
@@ -79,11 +86,18 @@ for ii in range(samplerate):
     E2out = mach_zender_interferometer_time_def.beamsplitter(PT1, E2in)
     E3_1in = E2out
 
+
     #Arm 1
 
     E3_1out = mach_zender_interferometer_time_def.beamsplitter(PT2_1, E3_1in)
     
+    #print(E3_1out)
+    #print("")
+
     E4_1in = E3_1out
+
+    signal1 = amp_c1 * np.sin(2 * np.pi * freq_am1 * t) + dc_offset1
+    signal1col[ii] = signal1  
 
 
     E4_1out = mach_zender_interferometer_time_def.propagate1(wl, no, opl1, opl2+signal1, E4_1in) # Each path experience different path length
@@ -96,6 +110,8 @@ for ii in range(samplerate):
     
     E3_2in = E2out
     
+    signal2 = amp_c2 * np.sin(2 * np.pi * freq_am2 * t) + dc_offset2
+    signal2col[ii] = signal2
 
     
     
