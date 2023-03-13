@@ -42,7 +42,8 @@ PT4 = 0.5 # PT: Power Transmission of first beam splitter
 # Define Input Electric Field
 
 # Input: Port 1 only
-Ein1 = np.array([[1+0.0000j],[0-0.0000j]])
+E1in = np.array([[1+0.0000j],[0-0.0000j]])
+print(E1in)
 #Ein1 = np.array([[0.707+0.707j],[0]])
 
 # Input Both 1 and 2 port
@@ -72,7 +73,7 @@ for ii in range(samplerate):
     signal1 = amp_c1 * np.sin(2 * np.pi * freq_am1 * t) + dc_offset1
     signal1col[ii] = signal1  
     
-    E1out = mach_zender_interferometer_time_def.propagate1(wl, no, oplcommon1, oplcommon2, Ein1)
+    E1out = mach_zender_interferometer_time_def.propagate1(wl, no, oplcommon1, oplcommon2, E1in)
     E2in = E1out
     
     E2out = mach_zender_interferometer_time_def.beamsplitter(PT1, E2in)
