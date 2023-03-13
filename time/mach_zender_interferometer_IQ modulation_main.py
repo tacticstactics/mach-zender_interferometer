@@ -39,6 +39,7 @@ opl2= 100
 
 
 PT1 = 0.5 # PT: Power Transmission of first beam splitter
+
 PT2_1 = 0.5 # PT: Power Transmission of second beam splitter
 PT2_2 = 0.5 # PT: Power Transmission of second beam splitter
 
@@ -84,8 +85,10 @@ for ii in range(samplerate):
     E2in = E1out
     
     E2out = mach_zender_interferometer_time_def.beamsplitter(PT1, E2in)
-    E3_1in = E2out
+    E3_1in = np.array([[E2out[0,0]],[0+0j]])    
 
+    #print(E3_1in)
+    #print("")
 
     #Arm 1
 
@@ -108,9 +111,15 @@ for ii in range(samplerate):
     
     #Arm 2
     
-    E3_2in = E2out
+    E3_2in = np.array([[E2out[1,0]],[0+0j]])
     
-    signal2 = amp_c2 * np.sin(2 * np.pi * freq_am2 * t) + dc_offset2
+    print(E3_2in)
+    print("")
+    
+
+
+
+    signal2 = amp_c2 * np.sin(2 * np.pi * freq_am2 * t + np.pi) + dc_offset2
     signal2col[ii] = signal2
 
     
@@ -144,7 +153,7 @@ ax1 = fig.add_subplot(3, 1, 1)
 ax2 = fig.add_subplot(3, 1, 2)
 ax3 = fig.add_subplot(3, 1, 3)
 
-ax1.plot(tcol,signal1col)
+ax1.plot(tcol,signal1col, tcol,signal2col)
 #ax1.set_ylim(-3,3)
 
 ax2.plot(tcol,P1_powercol,tcol,P2_powercol)
