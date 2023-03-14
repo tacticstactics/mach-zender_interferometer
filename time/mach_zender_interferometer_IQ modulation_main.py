@@ -85,7 +85,7 @@ for ii in range(samplerate):
     E2in = E1out
     
     E2out = mach_zender_interferometer_time_def.beamsplitter(PT1, E2in)
-    E3_1in = np.array([[E2out[0,0]],[0+0j]])    
+    E3_1in = np.array([[E2out[0,0]],[0+0j]])
 
     #print(E3_1in)
     #print("")
@@ -108,19 +108,21 @@ for ii in range(samplerate):
     
     E5_1out = mach_zender_interferometer_time_def.beamsplitter(PT2_2, E5_1in) # Each path enter second beam splitter
     E6_1in = E5_1out
-    
+
+
     #Arm 2
-    
+
     E3_2in = np.array([[E2out[1,0]],[0+0j]])
-    
+
     print(E3_2in)
     print("")
-    
-
-
-
+ 
     signal2 = amp_c2 * np.sin(2 * np.pi * freq_am2 * t + np.pi) + dc_offset2
     signal2col[ii] = signal2
+
+    E3_2out = mach_zender_interferometer_time_def.beamsplitter(PT2_2, E3_2in)
+
+    E4_2in = E3_2out
 
     
     
