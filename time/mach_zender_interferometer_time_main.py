@@ -24,7 +24,7 @@ oplcommon2=100 #Common Path Length 2
 
 opl1 =100 
 opl2= 100
-# Optical Path Length Difference (opl1-opl2) determines free spectral range as optical filter.
+# Optical Path Length Difference (opl1-opl2) determines free spectral range as optical filter. In the case of modulator, DOPL does not affect.
 
 wl = 0.633; #wavelength in um
 
@@ -59,17 +59,19 @@ P2_powercol = np.zeros(samplerate)
 P2_phasecol = np.zeros(samplerate)
 
 
-# random signal generation
 
-a_range = [1, 5]
+a_range = [1, 10]
 a = np.random.rand(samplerate) * (a_range[1]-a_range[0]) + a_range[0] # range for amplitude
 
-b_range = [5, 20]
+b_range = [30, 60]
 b = np.random.rand(samplerate) *(b_range[1]-b_range[0]) + b_range[0] # range for frequency
 b = np.round(b)
 b = b.astype(int)
 
 b[0] = 0
+
+# random signal generation
+
 
 for i in range(1,np.size(b)):
     b[i] = b[i-1]+b[i]
@@ -81,7 +83,9 @@ while b[i]<np.size(random_signal):
     random_signal[k:] = a[i]
     i=i+1
 
-#----
+
+# prbs----
+
 a = np.zeros(samplerate)
 j = 0
 while j < samplerate:
@@ -107,18 +111,15 @@ for ii in range(samplerate):
     sine_signalcol[ii] = sinesignal  
 
 
-#signalcol = sine_signalcol
 #signalcol = random_signal
 signalcol = prbs1
+#signalcol = sine_signalcol
 
 
 for ii in range(samplerate):
     
     t = tcol[ii]
-
-    #signal = signalcol[ii]
     signal = signalcol[ii]
-
     
     Eout1 = mach_zender_interferometer_time_def.propagate1(wl, no, oplcommon1, oplcommon2, Ein1)
     Ein2 = Eout1
@@ -158,21 +159,19 @@ ax1 = fig.add_subplot(3, 1, 1)
 ax2 = fig.add_subplot(3, 1, 2)
 ax3 = fig.add_subplot(3, 1, 3)
 
-ax1.plot(tcol,signalcol)
+ax1.plot(tcol,signalcol, ".-")
 #ax1.set_ylim(-3,3)
 
-ax2.plot(tcol,P1_powercol,tcol,P2_powercol)
+ax2.plot(tcol,P1_powercol,".-", tcol,P2_powercol, ".-")
 
 ax2.set_ylabel("Power")
 ax2.set_ylim(0,1.1)
 ax2.grid()
 
-ax3.plot(tcol,P1_phasecol,tcol,P2_phasecol)
+ax3.plot(tcol,P1_phasecol,tcol,P2_phasecol, ".-")
 ax3.set_xlabel("time [s]")
 ax3.set_ylabel("Angle")
 ax3.set_ylim(-2,2)
 ax3.grid()
 
 plt.show()
-
-
