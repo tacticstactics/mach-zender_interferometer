@@ -47,7 +47,10 @@ Ein1 = np.array([[1+0.0000j],[0-0.0000j]])
 #Ein1 = np.array([[0],[0.707+0.707j]])
 
 tcol = np.zeros(samplerate)
-signalcol = np.zeros(samplerate)
+
+sine_signalcol = np.zeros(samplerate)
+random_signalcol = np.zeros(samplerate)
+prbs1 = np.zeros(samplerate)
 
 P1_powercol = np.zeros(samplerate)
 P1_phasecol = np.zeros(samplerate)
@@ -56,13 +59,66 @@ P2_powercol = np.zeros(samplerate)
 P2_phasecol = np.zeros(samplerate)
 
 
+# random signal generation
+
+a_range = [1, 5]
+a = np.random.rand(samplerate) * (a_range[1]-a_range[0]) + a_range[0] # range for amplitude
+
+b_range = [5, 20]
+b = np.random.rand(samplerate) *(b_range[1]-b_range[0]) + b_range[0] # range for frequency
+b = np.round(b)
+b = b.astype(int)
+
+b[0] = 0
+
+for i in range(1,np.size(b)):
+    b[i] = b[i-1]+b[i]
+
+i=0
+random_signal = np.zeros(samplerate)
+while b[i]<np.size(random_signal):
+    k = b[i]
+    random_signal[k:] = a[i]
+    i=i+1
+
+#----
+a = np.zeros(samplerate)
+j = 0
+while j < samplerate:
+    a[j] = 4.2
+    a[j+1] = 0
+    j = j+2
+
+i=0
+prbs1 = np.zeros(samplerate)
+while b[i]<np.size(prbs1):
+    k = b[i]
+    prbs1[k:] = a[i]
+    i=i+1
+#----
+
+#sinesignal
 for ii in range(samplerate):
     
     t = stept * ii
     tcol[ii] = t
 
-    signal = amp_c * np.sin(2 * np.pi * freq_am * t) + dc_offset
-    signalcol[ii] = signal  
+    sinesignal = amp_c * np.sin(2 * np.pi * freq_am * t) + dc_offset
+    sine_signalcol[ii] = sinesignal  
+
+
+#signalcol = sine_signalcol
+#signalcol = random_signal
+signalcol = prbs1
+
+
+for ii in range(samplerate):
+    
+    t = tcol[ii]
+
+    #signal = signalcol[ii]
+    signal = signalcol[ii]
+
     
     Eout1 = mach_zender_interferometer_time_def.propagate1(wl, no, oplcommon1, oplcommon2, Ein1)
     Ein2 = Eout1
