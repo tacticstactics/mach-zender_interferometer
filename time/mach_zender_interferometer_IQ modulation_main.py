@@ -8,23 +8,22 @@ print('')
 print('mach-zender_interferometer_IQ modulation_main.py')
 print('')
 
-wl = 0.633; #wavelength in um
 
 samplerate = 2048 # Sampling Frequency. [Hz]
 stept = 1/samplerate
 
-amp_c1 = 2.5
 freq_am1 = 5 # [Hz]
-dc_offset1 = 2.5 # DC offset
+amp_c1 = 0.5*np.pi
+dc_offset1 = 0.5*np.pi # DC offset
 
 
-amp_c2 = 2.5
 freq_am2 = 5 # [Hz]
-dc_offset2 = 2.5 # DC offset
+amp_c2 = 0.5*np.pi
+dc_offset2 = 0.5 * np.pi # DC offset
 
-phase_IQ = 1*np.pi
+phase_IQ = 1*np.pi # Electric Phase delay between I and Q
 
-IPB = 300 #In Phase Bias
+IPB = 1*np.pi #In Phase Bias. Optical Phase dela between arm a and B
 
 
 no = 1 # Refractive Index of medium
@@ -80,7 +79,7 @@ for ii in range(samplerate):
     t = stept * ii
     tcol[ii] = t
     
-    E1out = mach_zender_interferometer_time_def.propagate1(wl, no, oplcommon1, oplcommon2, E1in)
+    E1out = mach_zender_interferometer_time_def.propagate1(oplcommon1, oplcommon2, E1in)
     E2in = E1out
     
     E2out = mach_zender_interferometer_time_def.beamsplitter(PT1, E2in)
@@ -103,13 +102,13 @@ for ii in range(samplerate):
     signal1col[ii] = signal1  
 
 
-    E4_1out = mach_zender_interferometer_time_def.propagate1(wl, no, opl1, opl2+signal1, E4_1in) # Each path experience different path length
+    E4_1out = mach_zender_interferometer_time_def.propagate1(opl1, opl2+signal1, E4_1in) # Each path experience different path length
     E5_1in = E4_1out
     
     E5_1out = mach_zender_interferometer_time_def.beamsplitter(PT3_1, E5_1in) # Each path enter second beam splitter
     E6_1in = E5_1out
 
-    E6_1out = mach_zender_interferometer_time_def.propagate1(wl, no, 0, 0, E6_1in) # do not experience delay
+    E6_1out = mach_zender_interferometer_time_def.propagate1(0, 0, E6_1in) # do not experience delay
 
 
     #Arm 2
@@ -129,13 +128,13 @@ for ii in range(samplerate):
     signal2col[ii] = signal2    
     
 
-    E4_2out = mach_zender_interferometer_time_def.propagate1(wl, no, opl1, opl2+signal2, E4_2in) # Each path experience different path length
+    E4_2out = mach_zender_interferometer_time_def.propagate1(opl1, opl2+signal2, E4_2in) # Each path experience different path length
     E5_2in = E4_2out
 
     E5_2out = mach_zender_interferometer_time_def.beamsplitter(PT3_2, E5_2in) # Each path enter second beam splitter
     E6_2in = E5_2out
 
-    E6_2out = mach_zender_interferometer_time_def.propagate1(wl, no, IPB, IPB, E6_2in) # Actually only one path couple to fourth beam splitter
+    E6_2out = mach_zender_interferometer_time_def.propagate1(IPB, IPB, E6_2in) # Actually only one path couple to fourth beam splitter
     
     # Combine I + Q using fourth beam splitter
 

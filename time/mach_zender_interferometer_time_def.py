@@ -4,9 +4,9 @@
 import numpy as np
 
 
-def propagate1(wl=0.633,no=1, opl1=1, opl2=1, Ein=np.array([[1],[0]])):
+def propagate1(opl1=1, opl2=1, Ein=np.array([[1],[0]])):
 
-    propagatematrix1 = np.array([[np.exp(1j*wl*no*opl1),0],[0,np.exp(1j*wl*no*opl2)]]);
+    propagatematrix1 = np.array([[np.exp(1j*opl1),0],[0,np.exp(1j*opl2)]]);
 
     Eout = np.dot(propagatematrix1,Ein)
     
