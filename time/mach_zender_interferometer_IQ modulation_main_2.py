@@ -13,27 +13,81 @@ wl1 = 1550e-9
 freq1 = c / wl1
 
 samplerate = 16384 # NUmber of Points
-stept = 0.25 * 1e-15 #[s]
-
+stept = 0.5 * 1e-15 #[s]
 tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
 
-freq_am1 = 400e9 # [Hz]
-amp_c1 = 0*np.pi
-dc_offset1 = 0.25*np.pi # DC offset
+freq_rf1 = 1e12 # [Hz]
+amp_sine = 0.5*np.pi
 
-
-freq_am2 = 800e9 # [Hz]
-amp_c2 = 0.25*np.pi
-dc_offset2 = 0.25 * np.pi # DC offset
+#prbs
+amp_prbs = 1*np.pi
 
 #
 
-phase_IQ = 0*np.pi # RF Phase delay between I and Q signal
-
 IPB = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm a and B
 
+#sinesignal
+dc_offset = 0.5*np.pi # DC offset
 
-no = 1 # Refractive Index of medium
+sine_signalcol = np.zeros(samplerate)
+
+for ii in range(samplerate):    
+    
+    t = tcol[ii]
+
+    sinesignal = amp_sine * np.sin(2 * np.pi * freq_rf1 * t) + dc_offset
+    sine_signalcol[ii] = sinesignal  
+
+
+
+# Random_signal generation
+
+a_range = [0, 1]
+a = np.random.rand(samplerate) * (a_range[1]-a_range[0]) + a_range[0] # range for amplitude
+
+b_range = [300, 600]
+b = np.random.rand(samplerate) *(b_range[1]-b_range[0]) + b_range[0] # range for frequency
+b = np.round(b)
+b = b.astype(int)
+
+b[0] = 0
+
+for i in range(1,np.size(b)):
+    b[i] = b[i-1]+b[i]
+
+i=0
+random_signal = np.zeros(samplerate)
+while b[i]<np.size(random_signal):
+    k = b[i]
+    random_signal[k:] = a[i]
+    i=i+1
+
+
+# prbs----
+a = np.zeros(samplerate)
+j = 0
+while j < samplerate:
+    a[j] = amp_prbs
+    a[j+1] = 0
+    j = j+2
+
+i=0
+prbs1 = np.zeros(samplerate)
+while b[i]<np.size(prbs1):
+    k = b[i]
+    prbs1[k:] = a[i]
+    i=i+1
+#----
+
+
+#signalcol = random_signal
+signal1col = prbs1
+#signal1col = np.zeros(samplerate)
+
+#signal2col = sine_signalcol
+signal2col = prbs1
+#signal2col = np.zeros(samplerate)
+
 
 #
 oplcommon1=1 #Common Path Length 1
@@ -42,8 +96,6 @@ oplcommon2=1 #Common Path Length 2
 #opl1 =100 
 #opl2= 100
 # Optical Path Length Difference (opl1-opl2) determines free spectral range as optical filter.
-
-
 
 PT1 = 0.5 # PT: Power Transmission of first beam splitter
 
@@ -75,9 +127,6 @@ E1in = np.array([[1+0.0000j],[0-0.0000j]])
 #Ein1 = np.array([[0],[0.707+0.707j]])
 
 
-signal1col = np.zeros(samplerate)
-signal2col = np.zeros(samplerate)
-
 E7_col = np.zeros(samplerate)
 
 P1_powercol = np.zeros(samplerate)
@@ -98,10 +147,6 @@ for ii in range(samplerate):
     E2out = mach_zender_interferometer_time_def.beamsplitter(PT1, E2in)
     E3_1in = np.array([[E2out[0,0]],[0+0j]])
 
-    #print("E3_1in")
-    #print(E3_1in)
-    #print("")
-
     #Arm 1
 
     E3_1out = mach_zender_interferometer_time_def.beamsplitter(PT2_1, E3_1in)
@@ -113,8 +158,7 @@ for ii in range(samplerate):
     
     opl1 = 2*np.pi * freq1 * t
 
-    signal1 = amp_c1 * np.sin(2 * np.pi * freq_am1 * t) + dc_offset1
-    signal1col[ii] = signal1  
+    signal1 = signal1col[ii]  
 
 
     E4_1out = mach_zender_interferometer_time_def.propagate1(opl1, opl1+signal1, E4_1in) # Each path experience different path length
@@ -128,17 +172,14 @@ for ii in range(samplerate):
 
     #Arm 2
 
-    E3_2in = np.array([[E2out[1,0]],[0+0j]])
-    
-    #print("E3_2in")
-    #print(E3_2in)
-    #print("")
+    #E3_2in = np.array([[0+0j], [E2out[1,0]]])
+    E3_2in = np.array([[E2out[1,0]], [0+0j]])   
 
     E3_2out = mach_zender_interferometer_time_def.beamsplitter(PT2_2, E3_2in)
     E4_2in = E3_2out
  
-    signal2 = amp_c2 * np.sin(2 * np.pi * freq_am2 * t + phase_IQ) + dc_offset2
-    signal2col[ii] = signal2    
+    #signal2 = amp_c2 * np.sin(2 * np.pi * freq_am2 * t + phase_IQ) + dc_offset2
+    signal2 = signal2col[ii]    
     
 
     E4_2out = mach_zender_interferometer_time_def.propagate1(opl1, opl1+signal2, E4_2in) # Each path experience different path length
@@ -178,20 +219,20 @@ for ii in range(samplerate):
 
 for ii in range(samplerate):
     
-    t2 =tcol[ii] 
+    t =tcol[ii] 
 
     E8_in = E7_col[ii]
 
     E8_out = mach_zender_interferometer_time_def.beamsplitter(PT5, E8_in) # Each path enter second beam splitter   
     
     #Local Oscillator
-    losc_I_phase = 2*np.pi * freq1 * t2
+    losc_I_phase = 2*np.pi * freq1 * t
     losc_Q_phase = losc_I_phase + IPB
 
-    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[1+0.0000j],[1-0.0000j]]))
+    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[1+0.0000j],[0-0.0000j]]))
     # Actually only one path couple to fourth beam splitter
     # 
-    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[1+0.0000j],[1-0.0000j]]))
+    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[1+0.0000j],[0-0.0000j]]))
 
     E9_1in = np.array([[E8_out[0,0]],[Elosc_I[0,0]]])
     E9_2in = np.array([[E8_out[1,0]],[Elosc_Q[0,0]]])
@@ -230,11 +271,11 @@ ax2.plot(tcol,signal2col, ".-",color="y")
 ax2.grid()
 
 ax3.plot(tcol,P1_powercol, ".-",color="m")
-#ax3.set_ylim(-0.1,1.1)
+ax3.set_ylim(-0.1,1.1)
 ax3.grid()
 
 ax4.plot(tcol,P2_powercol, ".-",color="m")
-#ax4.set_ylim(-0.1,1.1)
+ax4.set_ylim(-0.1,1.1)
 ax4.grid()
 
 
@@ -246,16 +287,11 @@ ax23 = fig2.add_subplot(4, 1, 3)
 ax24 = fig2.add_subplot(4, 1, 4)
 
 ax23.plot(tcol,P9_1powercol, ".-",color="m")
-#ax23.set_ylim(-0.1,1.1)
+ax23.set_ylim(-0.1,1.1)
 ax23.grid()
 
 ax24.plot(tcol,P9_2powercol, ".-",color="m")
-#ax24.set_ylim(-0.1,1.1)
+ax24.set_ylim(-0.1,1.1)
 ax24.grid()
 
-
 plt.show()
-
-
-
-

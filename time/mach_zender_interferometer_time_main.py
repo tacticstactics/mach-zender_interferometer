@@ -9,7 +9,7 @@ print('')
 print('mach-zender_interferometer_time_main.py')
 print('')
 
-samplerate = 4*16384 # NUmber of Points
+samplerate = 16384 # NUmber of Points
 stept = 0.5*1e-15
 
 print("stept [s]")
@@ -42,12 +42,14 @@ prbs1 = np.zeros(samplerate)
 #Sine signal parameters
 
 amp_c = 0.5 * np.pi
-freq_rf = 400e9 # [Hz]
-md = 1 # modulation depth. 1 = 100 %
-dc_offset = 0.5*np.pi # DC offset
+freq_rf = 100e9 # [Hz]
+
 
 
 #sinesignal
+
+dc_offset = -0.5*np.pi # DC offset
+
 for ii in range(samplerate):    
     
     t = tcol[ii]
@@ -57,12 +59,12 @@ for ii in range(samplerate):
 
 
 
-# Random signal generation
+# Random_signal generation
 
-a_range = [1, 10]
+a_range = [0, 1]
 a = np.random.rand(samplerate) * (a_range[1]-a_range[0]) + a_range[0] # range for amplitude
 
-b_range = [30, 60]
+b_range = [300, 600]
 b = np.random.rand(samplerate) *(b_range[1]-b_range[0]) + b_range[0] # range for frequency
 b = np.round(b)
 b = b.astype(int)
@@ -85,8 +87,8 @@ while b[i]<np.size(random_signal):
 a = np.zeros(samplerate)
 j = 0
 while j < samplerate:
-    a[j] = 4.2
-    a[j+1] = 0
+    a[j] = 1*np.pi + 0*np.pi
+    a[j+1] = 0*np.pi
     j = j+2
 
 i=0
@@ -97,9 +99,9 @@ while b[i]<np.size(prbs1):
     i=i+1
 #----
 
-signalcol = sine_signalcol
+#signalcol = sine_signalcol
 #signalcol = random_signal
-#signalcol = prbs1
+signalcol = prbs1
 
 
 #Define Input condition
@@ -184,16 +186,16 @@ ax1.plot(tcol,signalcol, ".-")
 
 ax2.plot(tcol,np.real(Eout_port1col))
 
-ax3.plot(tcol,P1_powercol,".-", tcol,P2_powercol, ".-")
+ax3.plot(tcol,P1_powercol,".-")
 
 ax3.set_ylabel("Power")
-ax3.set_ylim(0,1.1)
+#ax3.set_ylim(0,1.1)
 ax3.grid()
 
-ax4.plot(tcol,P1_phasecol,tcol,P2_phasecol, ".-")
+ax4.plot(tcol,P2_powercol, ".-")
 ax4.set_xlabel("time [s]")
-ax4.set_ylabel("Angle")
-ax4.set_ylim(-2,2)
+ax4.set_ylabel("Power")
+#ax4.set_ylim(-2,2)
 ax4.grid()
 
 plt.show()
