@@ -24,7 +24,7 @@ amp_prbs = 1*np.pi
 
 #
 
-IPB = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm a and B
+IPB = 1. * np.pi #In Phase Bias: Optical Phase delay between Arm a and B
 
 #sinesignal
 dc_offset = 0.5*np.pi # DC offset
@@ -38,7 +38,7 @@ for ii in range(samplerate):
 
 # Random_signal generation
 
-a_range = [0, 1]
+a_range = [0, 2]
 a = np.random.rand(samplerate) * (a_range[1]-a_range[0]) + a_range[0] # range for amplitude
 
 b_range = [300, 600]
@@ -75,13 +75,15 @@ while b[i]<np.size(prbs1):
     i=i+1
 #----
 
-
-#signalcol = random_signal
-signal1col = prbs1
+signal1col = sine_signalcol
+#signal1col = random_signal
+#signal1col = prbs1
 #signal1col = np.zeros(samplerate)
 
-#signal2col = sine_signalcol
-signal2col = prbs1
+
+signal2col = sine_signalcol
+#signal2col = random_signal
+#signal2col = prbs1
 #signal2col = np.zeros(samplerate)
 
 
@@ -122,8 +124,8 @@ E1in = np.array([[1+0.0000j],[0-0.0000j]])
 #Ein1 = np.array([[0],[1]]) 
 #Ein1 = np.array([[0],[0.707+0.707j]])
 
-
-E7_col = np.zeros(samplerate)
+E7out_p1_col = np.zeros(samplerate)
+E7out_p2_col = np.zeros(samplerate)
 
 P1_powercol = np.zeros(samplerate)
 P2_powercol = np.zeros(samplerate)
@@ -194,14 +196,15 @@ for ii in range(samplerate):
     E7_out = mach_zender_interferometer_time_def.beamsplitter(PT4, E7_in) # Each path enter second beam splitter
     
     E7out_port1 = E7_out[0,0] #trans
-    E7_col[ii] = E7out_port1
+    E7out_p1_col[ii] = E7out_port1
 
     power_11 = (np.abs(E7out_port1))**2 # Optical power is calculated as square of absolute electric field strength
     P1_powercol[ii] = power_11    
   
 
-    E7out_port_2 = E7_out[1,0] #reflect
-    power_22 = (np.abs(E7out_port_2))**2
+    E7out_port2 = E7_out[1,0] #reflect
+    E7out_p2_col[ii] = E7out_port2
+    power_22 = (np.abs(E7out_port2))**2
     
     P2_powercol[ii] = power_22   
     
@@ -213,7 +216,7 @@ for ii in range(samplerate):
     
     t =tcol[ii] 
 
-    E8_in = E7_col[ii]
+    E8_in = E7out_p1_col[ii]
 
     E8_out = mach_zender_interferometer_time_def.beamsplitter(PT5, E8_in) # Each path enter second beam splitter   
     
@@ -226,8 +229,8 @@ for ii in range(samplerate):
     # 
     Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[1+0.0000j],[0-0.0000j]]))
 
-    E9_1in = np.array([[E8_out[0,0]],[Elosc_I[0,0]]])
-    E9_2in = np.array([[E8_out[1,0]],[Elosc_Q[0,0]]])
+    E9_1in = np.array([[E8_out[0,0]], [0.25*Elosc_I[0,0]]])
+    E9_2in = np.array([[E8_out[1,0]], [0.25*Elosc_Q[0,0]]])
 
     E9_1out = mach_zender_interferometer_time_def.beamsplitter(PT6_1, E9_1in) # Each path enter second beam splitter   
     
@@ -262,12 +265,12 @@ ax2.plot(tcol,signal2col, ".-",color="y")
 #ax2.set_ylabel("Power")
 ax2.grid()
 
-ax3.plot(tcol,P1_powercol, ".-",color="m")
-ax3.set_ylim(-0.1,1.1)
+ax3.plot(tcol,np.real(E7out_p1_col), ".-",color="m")
+#ax3.set_ylim(-0.1,1.1)
 ax3.grid()
 
-ax4.plot(tcol,P2_powercol, ".-",color="m")
-ax4.set_ylim(-0.1,1.1)
+ax4.plot(tcol,np.real(E7out_p2_col), ".-",color="m")
+#ax4.set_ylim(-0.1,1.1)
 ax4.grid()
 
 
