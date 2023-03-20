@@ -24,17 +24,13 @@ amp_prbs = 1*np.pi
 
 #
 
-IPB = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm a and B
+IPB = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm a and B
 
 #sinesignal
 dc_offset = 0.5*np.pi # DC offset
-
 sine_signalcol = np.zeros(samplerate)
-
-for ii in range(samplerate):    
-    
+for ii in range(samplerate):       
     t = tcol[ii]
-
     sinesignal = amp_sine * np.sin(2 * np.pi * freq_rf1 * t) + dc_offset
     sine_signalcol[ii] = sinesignal  
 
@@ -193,10 +189,6 @@ for ii in range(samplerate):
     # Combine I + Q using fourth beam splitter
 
     E7_in = np.array([[E6_1out[0,0]], [E6_2out[0,0]]])
-
-    #print("E7_in")
-    #print(E7_in)
-    #print("")
 
 
     E7_out = mach_zender_interferometer_time_def.beamsplitter(PT4, E7_in) # Each path enter second beam splitter
