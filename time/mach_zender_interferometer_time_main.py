@@ -3,12 +3,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import mach_zender_interferometer_time_def
+from scipy.constants import c 
 
 print('')
 print('mach-zender_interferometer_time_main.py')
 print('')
 
-wl = 0.633 #wavelength in um
+samplerate = 16384 # NUmber of Points
+stept = 0.5*1e-15
+
+print("stept [s]")
+print(f'{stept:.5E}')
+print('')
+
+tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
+
+wl1 = 1550e-9 #wavelength [m]
+
+freq1 = c / wl1
+print("freq1 [Hz]")
+print(f'{freq1:.5E}')
+print("")
 
 no = 1 # Refractive Index of medium
 
@@ -24,10 +39,6 @@ PT2 = 0.5 # PT: Power Transmission of second beam splitter
 
 
 
-samplerate = 16384 # NUmber of Points
-stept = 1/samplerate
-
-tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
 
 sine_signalcol = np.zeros(samplerate)
 random_signalcol = np.zeros(samplerate)
@@ -125,19 +136,19 @@ for ii in range(samplerate):
     t = tcol[ii]
     signal = signalcol[ii]
     
-    Eout1 = mach_zender_interferometer_time_def.propagate1(wl, no, oplcommon1, oplcommon2, Ein1)
+    Eout1 = mach_zender_interferometer_time_def.propagate1(oplcommon1, oplcommon2, Ein1)
     Ein2 = Eout1
     
     Eout2 = mach_zender_interferometer_time_def.beamsplitter(PT1, Ein2)
     Ein3 = Eout2
     
-    Eout3 = mach_zender_interferometer_time_def.propagate1(wl, no, opl1, opl2+signal, Ein3) # Each path experience different path length
+    Eout3 = mach_zender_interferometer_time_def.propagate1(opl1, opl2+signal, Ein3) # Each path experience different path length
     Ein4 = Eout3
     
     Eout4 = mach_zender_interferometer_time_def.beamsplitter(PT2, Ein4) # Each path enter second beam splitter
     Ein5 = Eout4
     
-    Eout5 = mach_zender_interferometer_time_def.propagate1(wl, no, oplcommon1, oplcommon2, Ein5)
+    Eout5 = mach_zender_interferometer_time_def.propagate1(oplcommon1, oplcommon2, Ein5)
     Ein6 = Eout5
     
     Eout_port1 = Ein6[0,0] 
