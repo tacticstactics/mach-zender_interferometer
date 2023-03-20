@@ -4,7 +4,7 @@
 import numpy as np
 
 
-def propagate1(opl1=1, opl2=1, Ein=np.array([[1],[0]])):
+def propagate1(wl, no, opl1=1, opl2=1, Ein=np.array([[1],[0]])):
 
     propagatematrix1 = np.array([[np.exp(1j*opl1),0],[0,np.exp(1j*opl2)]]);
 

@@ -8,7 +8,7 @@ print('')
 print('mach-zender_interferometer_time_main.py')
 print('')
 
-wl = 0.633; #wavelength in um
+wl = 0.633 #wavelength in um
 
 no = 1 # Refractive Index of medium
 
