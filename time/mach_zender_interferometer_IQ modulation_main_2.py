@@ -13,7 +13,7 @@ wl1 = 1550e-9
 freq1 = c / wl1
 
 samplerate = 16384 # NUmber of Points
-stept = 1/samplerate
+stept = 0.5 * 1e-15 #[s]
 
 tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
 

@@ -9,7 +9,7 @@ print('')
 print('mach-zender_interferometer_time_main.py')
 print('')
 
-samplerate = 16384 # NUmber of Points
+samplerate = 4*16384 # NUmber of Points
 stept = 0.5*1e-15
 
 print("stept [s]")
@@ -27,17 +27,12 @@ print("")
 
 no = 1 # Refractive Index of medium
 
-oplcommon1=100 #Common Path Length 1
-oplcommon2=100 #Common Path Length 2
+oplcommon1=1 #Common Path Length 1
+oplcommon2=1 #Common Path Length 2
 
-opl1 =100 
-opl2= 100
-# Optical Path Length Difference (opl1-opl2) determines free spectral range as optical filter. In the case of modulator, DOPL does not affect.
 
 PT1 = 0.5 # PT: Power Transmission of first beam splitter
 PT2 = 0.5 # PT: Power Transmission of second beam splitter
-
-
 
 
 sine_signalcol = np.zeros(samplerate)
@@ -46,18 +41,18 @@ prbs1 = np.zeros(samplerate)
 
 #Sine signal parameters
 
-amp_c = 2.5
-freq_am = 5 # [Hz]
+amp_c = 0.5 * np.pi
+freq_rf = 400e9 # [Hz]
 md = 1 # modulation depth. 1 = 100 %
-dc_offset = 2.1 # DC offset
+dc_offset = 0.5*np.pi # DC offset
+
 
 #sinesignal
-for ii in range(samplerate):
+for ii in range(samplerate):    
     
-    t = stept * ii
-    tcol[ii] = t
+    t = tcol[ii]
 
-    sinesignal = amp_c * np.sin(2 * np.pi * freq_am * t) + dc_offset
+    sinesignal = amp_c * np.sin(2 * np.pi * freq_rf * t) + dc_offset
     sine_signalcol[ii] = sinesignal  
 
 
@@ -102,9 +97,8 @@ while b[i]<np.size(prbs1):
     i=i+1
 #----
 
-
-#signalcol = sine_signalcol
-signalcol = random_signal
+signalcol = sine_signalcol
+#signalcol = random_signal
 #signalcol = prbs1
 
 
@@ -130,10 +124,12 @@ P1_phasecol = np.zeros(samplerate)
 P2_powercol = np.zeros(samplerate)
 P2_phasecol = np.zeros(samplerate)
 
+Eout_port1col = np.zeros(samplerate)
+Eout_port2col = np.zeros(samplerate)
 
 for ii in range(samplerate):
     
-    t = tcol[ii]
+    t = tcol[ii]   
     signal = signalcol[ii]
     
     Eout1 = mach_zender_interferometer_time_def.propagate1(oplcommon1, oplcommon2, Ein1)
@@ -142,7 +138,10 @@ for ii in range(samplerate):
     Eout2 = mach_zender_interferometer_time_def.beamsplitter(PT1, Ein2)
     Ein3 = Eout2
     
-    Eout3 = mach_zender_interferometer_time_def.propagate1(opl1, opl2+signal, Ein3) # Each path experience different path length
+    phase1 = 2*np.pi * freq1 * t # phase of local oscillator [rad]
+    phase2 = 2*np.pi * freq1 * t + signal #[rad]
+
+    Eout3 = mach_zender_interferometer_time_def.propagate1(phase1, phase2, Ein3) # Each path experience different path length
     Ein4 = Eout3
     
     Eout4 = mach_zender_interferometer_time_def.beamsplitter(PT2, Ein4) # Each path enter second beam splitter
@@ -152,6 +151,8 @@ for ii in range(samplerate):
     Ein6 = Eout5
     
     Eout_port1 = Ein6[0,0] 
+    Eout_port1col[ii] = Eout_port1
+
     power_11 = (np.abs(Eout_port1))**2 # Optical power is calculated as square of absolute electric field strength
     P1_powercol[ii] = power_11
     
@@ -159,6 +160,8 @@ for ii in range(samplerate):
     P1_phasecol[ii] = P1_phase
     
     Eout_port_2 = Ein6[1,0]
+    Eout_port2col[ii] = Eout_port_2
+
     power_22 = (np.abs(Eout_port_2))**2
     
     P2_powercol[ii] = power_22
@@ -168,25 +171,29 @@ for ii in range(samplerate):
  
  
 
-fig = plt.figure(figsize = (10,6), facecolor='lightblue')
+fig = plt.figure(figsize = (12,6), facecolor='lightblue')
 
-ax1 = fig.add_subplot(3, 1, 1)
-ax2 = fig.add_subplot(3, 1, 2)
-ax3 = fig.add_subplot(3, 1, 3)
+ax1 = fig.add_subplot(4, 1, 1)
+ax2 = fig.add_subplot(4, 1, 2)
+ax3 = fig.add_subplot(4, 1, 3)
+ax4 = fig.add_subplot(4, 1, 4)
 
 ax1.plot(tcol,signalcol, ".-")
 #ax1.set_ylim(-3,3)
 
-ax2.plot(tcol,P1_powercol,".-", tcol,P2_powercol, ".-")
 
-ax2.set_ylabel("Power")
-ax2.set_ylim(0,1.1)
-ax2.grid()
+ax2.plot(tcol,np.real(Eout_port1col))
 
-ax3.plot(tcol,P1_phasecol,tcol,P2_phasecol, ".-")
-ax3.set_xlabel("time [s]")
-ax3.set_ylabel("Angle")
-ax3.set_ylim(-2,2)
+ax3.plot(tcol,P1_powercol,".-", tcol,P2_powercol, ".-")
+
+ax3.set_ylabel("Power")
+ax3.set_ylim(0,1.1)
 ax3.grid()
+
+ax4.plot(tcol,P1_phasecol,tcol,P2_phasecol, ".-")
+ax4.set_xlabel("time [s]")
+ax4.set_ylabel("Angle")
+ax4.set_ylim(-2,2)
+ax4.grid()
 
 plt.show()
