@@ -24,10 +24,10 @@ PT2 = 0.5 # PT: Power Transmission of second beam splitter
 
 
 
-samplerate = 2048 # Sampling Frequency. [Hz]
+samplerate = 16384 # NUmber of Points
 stept = 1/samplerate
 
-tcol = np.zeros(samplerate)
+tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
 
 sine_signalcol = np.zeros(samplerate)
 random_signalcol = np.zeros(samplerate)

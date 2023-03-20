@@ -12,8 +12,10 @@ print('')
 wl1 = 1550e-9
 freq1 = c / wl1
 
-samplerate = 2048 # Sampling Frequency. [Hz]
+samplerate = 16384 # NUmber of Points
 stept = 1/samplerate
+
+tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
 
 freq_am1 = 5 # [Hz]
 amp_c1 = 0.5*np.pi
@@ -72,7 +74,6 @@ E1in = np.array([[1+0.0000j],[0-0.0000j]])
 #Ein1 = np.array([[0],[1]]) 
 #Ein1 = np.array([[0],[0.707+0.707j]])
 
-tcol = np.zeros(samplerate)
 t_rx_col = np.zeros(samplerate)
 
 signal1col = np.zeros(samplerate)
@@ -89,9 +90,8 @@ P9_2powercol = np.zeros(samplerate)
 #Tx
 
 for ii in range(samplerate):
-    
-    t = stept * ii
-    tcol[ii] = t
+        
+    t = tcol[ii]
     
     E1out = mach_zender_interferometer_time_def.propagate1(wl1, no, oplcommon1, oplcommon2, E1in)
     E2in = E1out
