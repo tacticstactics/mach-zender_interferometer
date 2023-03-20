@@ -6,7 +6,7 @@ import mach_zender_interferometer_time_def
 from scipy.constants import c 
 
 print('')
-print('mach-zender_interferometer_time_main.py')
+print('Mach-zender_interferometer_time_main')
 print('')
 
 samplerate = 16384 # NUmber of Points
@@ -21,7 +21,7 @@ tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
 wl1 = 1550e-9 #wavelength [m]
 
 freq1 = c / wl1
-print("freq1 [Hz]")
+print("Optical Frequency: freq1 [Hz]")
 print(f'{freq1:.5E}')
 print("")
 
@@ -34,21 +34,14 @@ oplcommon2=1 #Common Path Length 2
 PT1 = 0.5 # PT: Power Transmission of first beam splitter
 PT2 = 0.5 # PT: Power Transmission of second beam splitter
 
-
-sine_signalcol = np.zeros(samplerate)
-random_signalcol = np.zeros(samplerate)
-prbs1 = np.zeros(samplerate)
-
 #Sine signal parameters
 
 amp_c = 0.5 * np.pi
 freq_rf = 100e9 # [Hz]
 
-
-
-#sinesignal
-
 dc_offset = -0.5*np.pi # DC offset
+
+sine_signalcol = np.zeros(samplerate)
 
 for ii in range(samplerate):    
     
@@ -100,8 +93,8 @@ while b[i]<np.size(prbs1):
 #----
 
 #signalcol = sine_signalcol
-#signalcol = random_signal
-signalcol = prbs1
+signalcol = random_signal
+#signalcol = prbs1
 
 
 #Define Input condition
@@ -171,8 +164,6 @@ for ii in range(samplerate):
     P2_phase = np.angle(power_22)
     P2_phasecol[ii] = P2_phase
  
- 
-
 fig = plt.figure(figsize = (12,6), facecolor='lightblue')
 
 ax1 = fig.add_subplot(4, 1, 1)
@@ -181,20 +172,21 @@ ax3 = fig.add_subplot(4, 1, 3)
 ax4 = fig.add_subplot(4, 1, 4)
 
 ax1.plot(tcol,signalcol, ".-")
+ax1.set_ylabel("RF signal")
 #ax1.set_ylim(-3,3)
 
-
 ax2.plot(tcol,np.real(Eout_port1col))
+ax2.set_ylabel("Electric Field")
 
 ax3.plot(tcol,P1_powercol,".-")
 
-ax3.set_ylabel("Power")
+ax3.set_ylabel("port1 Power")
 #ax3.set_ylim(0,1.1)
 ax3.grid()
 
 ax4.plot(tcol,P2_powercol, ".-")
 ax4.set_xlabel("time [s]")
-ax4.set_ylabel("Power")
+ax4.set_ylabel("port2 Power")
 #ax4.set_ylim(-2,2)
 ax4.grid()
 
