@@ -13,7 +13,7 @@ wl1 = 1550e-9
 freq1 = c / wl1
 
 samplerate = 8*8192 # NUmber of Points
-stept = 0.005 * 1e-15 #[s]
+stept = 0.002 * 1e-15 #[s]
 tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
 
 amp_sine = 0.5*np.pi
@@ -26,7 +26,7 @@ freq_cosine1 = 1e12 # [Hz]
 
 
 #sinesignal
-sine_signalcol = np.zeros(samplerate)
+sine_signalcol = np.zeros(samplerate, dtype=complex)
 for ii in range(samplerate):       
     t = tcol[ii]
     sinesignal = amp_sine * np.sin(2 * np.pi * freq_sine1 * t) + dc_offset
@@ -34,7 +34,7 @@ for ii in range(samplerate):
 
 
 #cossignal
-cosine_signalcol = np.zeros(samplerate)
+cosine_signalcol = np.zeros(samplerate, dtype=complex)
 for ii in range(samplerate):       
     t = tcol[ii]
     cosinesignal = amp_cosine * np.cos(2 * np.pi * freq_cosine1 * t) + dc_offset
@@ -62,7 +62,7 @@ for i in range(1,np.size(b)):
     b[i] = b[i-1]+b[i]
 
 i=0
-random_signal = np.zeros(samplerate)
+random_signal = np.zeros(samplerate, dtype=complex)
 while b[i]<np.size(random_signal):
     k = b[i]
     random_signal[k:] = a[i]
@@ -76,7 +76,7 @@ while j < samplerate:
     j = j+2
 
 i=0
-prbs1 = np.zeros(samplerate)
+prbs1 = np.zeros(samplerate, dtype=complex)
 while b[i]<np.size(prbs1):
     k = b[i]
     prbs1[k:] = a[i]
@@ -95,13 +95,13 @@ for i in range(1,np.size(b2)):
     b2[i] = b2[i-1]+b2[i]
 
 i=0
-random_signal2 = np.zeros(samplerate)
+random_signal2 = np.zeros(samplerate, dtype=complex)
 while b[i]<np.size(random_signal2):
     k = b2[i]
     random_signal2[k:] = a[i]
     i=i+1
 
-a2 = np.zeros(samplerate)
+a2 = np.zeros(samplerate, dtype=complex)
 j = 0
 while j < samplerate:
     a2[j] = amp_prbs
@@ -109,7 +109,7 @@ while j < samplerate:
     j = j+2
 
 i=0
-prbs2 = np.zeros(samplerate)
+prbs2 = np.zeros(samplerate, dtype=complex)
 while b2[i]<np.size(prbs2):
     k = b2[i]
     prbs2[k:] = a2[i]
@@ -158,8 +158,8 @@ PT5 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_1 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_2 = 0.5 # PT: Power Transmission of 5th beam splitter
 
-IPB1 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
-IPB2 = -0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB1 = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB2 = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
 
 # Define Input Electric Field
 
