@@ -132,8 +132,8 @@ signal1col = prbs1
 
 #signal2col = sine_signalcol
 #signal2col = random_signal
-#signal2col = prbs2
-signal2col = np.zeros(samplerate)
+signal2col = prbs2
+#signal2col = np.zeros(samplerate)
 
 
 #
@@ -159,7 +159,7 @@ PT6_1 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_2 = 0.5 # PT: Power Transmission of 5th beam splitter
 
 IPB1 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
-IPB2 = 0 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB2 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
 
 # Define Input Electric Field
 
@@ -266,7 +266,7 @@ for ii in range(samplerate):
     Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.1+0.0j],[0-0.0j]]))
     # Actually only one path couple to fourth beam splitter
     # 
-    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.1+0.0j],[0-0.0j]]))
+    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0+0.0j],[0.1-0.0j]]))
 
     E9_1in = np.array([[E8_out[0,0]], [Elosc_I[0,0]]])
     E9_2in = np.array([[E8_out[1,0]], [Elosc_Q[0,0]]])
