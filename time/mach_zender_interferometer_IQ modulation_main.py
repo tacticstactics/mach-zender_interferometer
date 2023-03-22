@@ -158,14 +158,14 @@ PT5 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_1 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_2 = 0.5 # PT: Power Transmission of 5th beam splitter
 
-IPB1 = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
-IPB2 = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB1 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB2 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
 
 # Define Input Electric Field
 
 # Input: Port 1 only
-E1in = np.array([[1+0.00j],[0-0.00j]])
-#Ein1 = np.array([[0.707+0.707j],[0]])
+#E1in = np.array([[1+0.00j],[0-0.00j]])
+E1in = np.array([[0.707+0.707j],[0]])
 
 # Input Both 1 and 2 port
 #Ein1 = np.array([[1+0j],[1-0j]]) 
@@ -262,7 +262,7 @@ for ii in range(samplerate):
     E8_out = mach_zender_interferometer_time_def.beamsplitter(PT5, E8_in) # Each path enter fifth beam splitter   
     
     #Local Oscillator
-    losc_I_phase = 2*np.pi * freq1 * t + 100
+    losc_I_phase = 2*np.pi * freq1 * t
     losc_Q_phase = losc_I_phase + IPB2
 
     Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.1+0.0j],[0-0.0j]]))
@@ -294,13 +294,14 @@ for ii in range(samplerate):
 
 
 
-fig1 = plt.figure(figsize = (10,8), facecolor='lightblue')
+fig1 = plt.figure(figsize = (10,10), facecolor='lightblue')
 
-ax1 = fig1.add_subplot(5, 1, 1)
-ax2 = fig1.add_subplot(5, 1, 2)
-ax3 = fig1.add_subplot(5, 1, 3)
-ax4 = fig1.add_subplot(5, 1, 4)
-ax5 = fig1.add_subplot(5, 1, 5)
+ax1 = fig1.add_subplot(6, 1, 1)
+ax2 = fig1.add_subplot(6, 1, 2)
+ax3 = fig1.add_subplot(6, 1, 3)
+ax4 = fig1.add_subplot(6, 1, 4)
+ax5 = fig1.add_subplot(6, 1, 5)
+ax6 = fig1.add_subplot(6, 1, 6)
 
 ax1.plot(tcol,signal1col, "-", color="c")
 #ax1.set_ylim(-1*np.pi,np.pi)
@@ -312,20 +313,26 @@ ax2.plot(tcol,signal2col, "-",color="y")
 #ax2.set_ylabel("Power")
 ax2.grid()
 
-ax3.plot(tcol,np.real(E7out_p1_col), "-",color="m")
+ax3.plot(tcol,np.real(E7out_p1_col), "-",color="c")
 ax3.set_ylim(-1.1,1.1)
 ax3.set_ylabel("Electric Field")
 ax3.grid()
 
-ax4.plot(tcol,np.real(E7out_p2_col), "-",color="m")
-ax4.set_ylim(-1.1,1.1)
-ax4.set_ylabel("Electric Field")
+ax4.plot(tcol,(np.abs(E7out_p1_col))**2, "-",color="c")
+ax4.set_ylim(-0.1,1.1)
+ax4.set_ylabel("Power")
 ax4.grid()
 
-ax5.plot(tcol,(np.abs(E7out_p2_col))**2, "-",color="m")
-ax5.set_ylim(-0.1,1.1)
-ax5.set_ylabel("Power")
+
+ax5.plot(tcol,np.real(E7out_p2_col), "-",color="m")
+ax5.set_ylim(-1.1,1.1)
+ax5.set_ylabel("Electric Field")
 ax5.grid()
+
+ax6.plot(tcol,(np.abs(E7out_p2_col))**2, "-",color="m")
+ax6.set_ylim(-0.1,1.1)
+ax6.set_ylabel("Power")
+ax6.grid()
 
 
 
