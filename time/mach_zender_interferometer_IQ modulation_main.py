@@ -12,8 +12,8 @@ print('')
 wl1 = 1550e-9
 freq1 = c / wl1
 
-samplerate = 4*8192 # NUmber of Points
-stept = 0.005 * 1e-15 #[s]
+samplerate = 8*8192 # NUmber of Points
+stept = 0.002 * 1e-15 #[s]
 tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
 
 amp_sine = 0.5*np.pi
@@ -51,7 +51,7 @@ amp_prbs = 1*np.pi
 a_range = [0, 1]
 a = np.random.rand(samplerate) * (a_range[1]-a_range[0]) + a_range[0] # range for amplitude
 
-b_range = [800, 2400]
+b_range = [2000, 4000]
 b = np.random.rand(samplerate) *(b_range[1]-b_range[0]) + b_range[0] # range for frequency
 b = np.round(b)
 b = b.astype(int)
@@ -84,7 +84,7 @@ while b[i]<np.size(prbs1):
 
 #-----
 
-b2_range = [1200, 2400]
+b2_range = [4000, 6000]
 b2 = np.random.rand(samplerate) *(b2_range[1]-b2_range[0]) + b2_range[0] # range for frequency
 b2 = np.round(b2)
 b2 = b2.astype(int)
@@ -126,13 +126,13 @@ while b2[i]<np.size(prbs2):
 #signal1col = cosine_signalcol
 #signal1col = sine_signalcol
 #signal1col = random_signal
-#signal1col = prbs1
-signal1col = np.zeros(samplerate)
+signal1col = prbs1
+#signal1col = np.zeros(samplerate)
 #signal1col = randomintcol
 
 #signal2col = sine_signalcol
 #signal2col = random_signal
-signal2col = prbs2
+signal2col = prbs1
 #signal2col = np.zeros(samplerate)
 
 
@@ -158,8 +158,8 @@ PT5 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_1 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_2 = 0.5 # PT: Power Transmission of 5th beam splitter
 
-IPB1 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
-IPB2 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB1 = 0. * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB2 = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
 
 # Define Input Electric Field
 
@@ -272,7 +272,8 @@ for ii in range(samplerate):
     E9_2out_port2 = E9_2out[0,0] #trans
     E9out_p2_col[ii] = E9_2out_port2
 
-   
+
+print(E9out_p2_col)
 
 
 fig1 = plt.figure(figsize = (10,8), facecolor='lightblue')
