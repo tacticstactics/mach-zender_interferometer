@@ -12,8 +12,8 @@ print('')
 wl1 = 1550e-9
 freq1 = c / wl1
 
-samplerate = 8192 # NUmber of Points
-stept = 0.25 * 1e-15 #[s]
+samplerate = 4*8192 # NUmber of Points
+stept = 0.005 * 1e-15 #[s]
 tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
 
 amp_sine = 0.5*np.pi
@@ -48,10 +48,10 @@ amp_prbs = 1*np.pi
 
 # Random_signal generation
 
-a_range = [0, 10]
+a_range = [0, 1]
 a = np.random.rand(samplerate) * (a_range[1]-a_range[0]) + a_range[0] # range for amplitude
 
-b_range = [300, 600]
+b_range = [800, 2400]
 b = np.random.rand(samplerate) *(b_range[1]-b_range[0]) + b_range[0] # range for frequency
 b = np.round(b)
 b = b.astype(int)
@@ -84,7 +84,7 @@ while b[i]<np.size(prbs1):
 
 #-----
 
-b2_range = [300, 600]
+b2_range = [1200, 2400]
 b2 = np.random.rand(samplerate) *(b2_range[1]-b2_range[0]) + b2_range[0] # range for frequency
 b2 = np.round(b2)
 b2 = b2.astype(int)
@@ -101,18 +101,18 @@ while b[i]<np.size(random_signal2):
     random_signal2[k:] = a[i]
     i=i+1
 
-a = np.zeros(samplerate)
+a2 = np.zeros(samplerate)
 j = 0
 while j < samplerate:
-    a[j] = amp_prbs
-    a[j+1] = 0
+    a2[j] = amp_prbs
+    a2[j+1] = 0
     j = j+2
 
 i=0
 prbs2 = np.zeros(samplerate)
-while b[i]<np.size(prbs2):
+while b2[i]<np.size(prbs2):
     k = b2[i]
-    prbs2[k:] = a[i]
+    prbs2[k:] = a2[i]
     i=i+1
 
 
@@ -126,8 +126,8 @@ while b[i]<np.size(prbs2):
 #signal1col = cosine_signalcol
 #signal1col = sine_signalcol
 #signal1col = random_signal
-signal1col = prbs1
-#signal1col = np.zeros(samplerate)
+#signal1col = prbs1
+signal1col = np.zeros(samplerate)
 #signal1col = randomintcol
 
 #signal2col = sine_signalcol
@@ -179,15 +179,8 @@ E1in = np.array([[1+0.00j],[0-0.00j]])
 E7out_p1_col = np.zeros(samplerate)
 E7out_p2_col = np.zeros(samplerate)
 
-P1_powercol = np.zeros(samplerate)
-P2_powercol = np.zeros(samplerate)
-
 E9out_p1_col = np.zeros(samplerate)
 E9out_p2_col = np.zeros(samplerate)
-
-
-P9_1powercol = np.zeros(samplerate)
-P9_2powercol = np.zeros(samplerate)
 
 #Tx
 
@@ -218,7 +211,7 @@ for ii in range(samplerate):
     E5_1out = mach_zender_interferometer_time_def.beamsplitter(PT3_1, E5_1in) # Each path enter second beam splitter
     E6_1in = E5_1out
 
-    E6_1out = mach_zender_interferometer_time_def.propagate1(0, 0, E6_1in) # no delay for arm A
+    E6_1out = mach_zender_interferometer_time_def.propagate1(opl1, opl1, E6_1in) # no delay for arm A
 
 
     #Arm 2
@@ -229,17 +222,15 @@ for ii in range(samplerate):
     E3_2out = mach_zender_interferometer_time_def.beamsplitter(PT2_2, E3_2in)
     E4_2in = E3_2out
  
-    #signal2 = amp_c2 * np.sin(2 * np.pi * freq_am2 * t + phase_IQ) + dc_offset2
-    signal2 = signal2col[ii]    
-    
+    signal2 = signal2col[ii]        
 
-    E4_2out = mach_zender_interferometer_time_def.propagate1(opl1+signal2, opl1, E4_2in) # Each path experience different path length
+    E4_2out = mach_zender_interferometer_time_def.propagate1(opl1, opl1+signal2, E4_2in) # Each path experience different path length
     E5_2in = E4_2out
 
     E5_2out = mach_zender_interferometer_time_def.beamsplitter(PT3_2, E5_2in) # Each path enter second beam splitter
     E6_2in = E5_2out
 
-    E6_2out = mach_zender_interferometer_time_def.propagate1(IPB1, IPB1, E6_2in) # Delay for arm B. Actually only one path couple to fourth beam splitter
+    E6_2out = mach_zender_interferometer_time_def.propagate1(opl1+IPB1, opl1+IPB1, E6_2in) # Delay for arm B. Actually only one path couple to fourth beam splitter
     
     # Combine I + Q using fourth beam splitter
 
@@ -266,7 +257,7 @@ for ii in range(samplerate):
     Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.1+0.0j],[0-0.0j]]))
     # Actually only one path couple to fourth beam splitter
     # 
-    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0+0.0j],[0.1-0.0j]]))
+    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.1+0.0j],[0-0.0j]]))
 
     E9_1in = np.array([[E8_out[0,0]], [Elosc_I[0,0]]])
     E9_2in = np.array([[E8_out[1,0]], [Elosc_Q[0,0]]])
@@ -281,11 +272,6 @@ for ii in range(samplerate):
     E9_2out_port2 = E9_2out[0,0] #trans
     E9out_p2_col[ii] = E9_2out_port2
 
-    #P9_1power = (np.abs(E9_1out_port1))**2 # Optical power is calculated as square of absolute electric field strength
-    #P9_1powercol[ii] = P9_1power
-
-    #P9_2power = (np.abs(E9_2out_port1))**2 # Optical power is calculated as square of absolute electric field strength
-    #P9_2powercol[ii] = P9_2power
    
 
 
@@ -333,6 +319,7 @@ ax24 = fig2.add_subplot(4, 1, 4)
 
 ax21.plot(tcol, np.real(E9out_p1_col), "-",color="m")
 #ax21.set_ylim(-1.1,1.1)
+ax21.set_ylim(-0.6,0.6)
 ax21.grid()
 
 ax22.plot(tcol, (np.abs(E9out_p1_col))**2, "-",color="m")
@@ -341,7 +328,7 @@ ax22.grid()
 
 
 ax23.plot(tcol, np.real(E9out_p2_col), "-",color="m")
-ax23.set_ylim(-1.1,1.1)
+ax23.set_ylim(-0.6,0.6)
 ax23.grid()
 
 ax24.plot(tcol, (np.abs(E9out_p2_col))**2, "-",color="m")
