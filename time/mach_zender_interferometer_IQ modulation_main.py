@@ -157,8 +157,8 @@ PT5 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_1 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_2 = 0.5 # PT: Power Transmission of 5th beam splitter
 
-IPB1 = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
-IPB2 = -1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB1 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB2 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
 
 # Define Input Electric Field
 
@@ -274,10 +274,10 @@ for ii in range(samplerate):
     losc_I_phase = 2*np.pi * freq1 * t
     losc_Q_phase = losc_I_phase + IPB2
 
-    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.05+0.0j],[0.0-0.0j]]))
+    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.0+0.0j],[0.0-0.0j]]))
     # Actually only one path couple to fourth beam splitter
     # 
-    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.05+0.0j],[0.0-0.0j]]))
+    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.0+0.0j],[0.0-0.0j]]))
 
     E9_1in = np.array([[E8_out[0,0]], [Elosc_Q[0,0]]])
 
@@ -361,7 +361,7 @@ ax21.plot(tcol, np.real(E9out_p1_col), "-",color="c")
 ax21.grid()
 
 ax22.plot(tcol, (np.abs(E9out_p1_col))**2, "-",color="c")
-ax22.set_ylim(-0.1,0.6)
+ax22.set_ylim(-0.1,0.3)
 ax22.grid()
 
 
@@ -370,7 +370,7 @@ ax23.plot(tcol, np.real(E9out_p2_col), "-",color="m")
 ax23.grid()
 
 ax24.plot(tcol, (np.abs(E9out_p2_col))**2, "-",color="m")
-ax24.set_ylim(-0.1,0.6)
+ax24.set_ylim(-0.1,0.3)
 ax24.grid()
 
 
