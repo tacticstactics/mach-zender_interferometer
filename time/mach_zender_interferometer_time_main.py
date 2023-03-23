@@ -10,7 +10,7 @@ print('Mach-zender_interferometer_time_main')
 print('')
 
 samplerate = 16384 # NUmber of Points
-stept = 0.5*1e-15
+stept = 0.2*1e-15
 
 print("stept [s]")
 print(f'{stept:.5E}')
@@ -92,9 +92,11 @@ while b[i]<np.size(prbs1):
     i=i+1
 #----
 
+# Select signal source
+
 #signalcol = sine_signalcol
-signalcol = random_signal
-#signalcol = prbs1
+#signalcol = random_signal
+signalcol = prbs1
 
 
 #Define Input condition
@@ -113,14 +115,12 @@ Ein1 = np.array([[1+0.0000j],[0-0.0000j]])
 #Ein1 = np.array([[0],[0.707+0.707j]])
 
 
-P1_powercol = np.zeros(samplerate)
-P1_phasecol = np.zeros(samplerate)
+P1_powercol = np.zeros(samplerate, dtype=complex)
 
-P2_powercol = np.zeros(samplerate)
-P2_phasecol = np.zeros(samplerate)
+P2_powercol = np.zeros(samplerate, dtype=complex)
 
-Eout_port1col = np.zeros(samplerate)
-Eout_port2col = np.zeros(samplerate)
+Eout_port1col = np.zeros(samplerate, dtype=complex)
+Eout_port2col = np.zeros(samplerate, dtype=complex)
 
 for ii in range(samplerate):
     
@@ -151,18 +151,13 @@ for ii in range(samplerate):
     power_11 = (np.abs(Eout_port1))**2 # Optical power is calculated as square of absolute electric field strength
     P1_powercol[ii] = power_11
     
-    P1_phase = np.angle(power_11)
-    P1_phasecol[ii] = P1_phase
-    
+   
     Eout_port_2 = Ein6[1,0]
     Eout_port2col[ii] = Eout_port_2
 
     power_22 = (np.abs(Eout_port_2))**2
-    
     P2_powercol[ii] = power_22
     
-    P2_phase = np.angle(power_22)
-    P2_phasecol[ii] = P2_phase
  
 fig = plt.figure(figsize = (12,6), facecolor='lightblue')
 

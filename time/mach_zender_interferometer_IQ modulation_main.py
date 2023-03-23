@@ -293,10 +293,10 @@ for ii in range(samplerate):
     
     E9_2out = mach_zender_interferometer_time_def.beamsplitter(PT6_2, E9_2in) # Each path enter sixth beam splitter
 
-    E9_1out_port1 = E9_1out[0,0] #trans
+    E9_1out_port1 = E9_1out[1,0] #trans
     E9out_p1_col[ii] = E9_1out_port1
 
-    E9_2out_port2 = E9_2out[0,0] #trans
+    E9_2out_port2 = E9_2out[1,0] #trans
     E9out_p2_col[ii] = E9_2out_port2
 
 
