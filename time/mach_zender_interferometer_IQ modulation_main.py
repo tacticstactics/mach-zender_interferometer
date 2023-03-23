@@ -45,44 +45,44 @@ for ii in range(samplerate):
 #prbs
 amp_prbs = 1*np.pi
 
-
 # Random_signal generation
 
-a_range = [0, 1]
-a = np.random.rand(samplerate) * (a_range[1]-a_range[0]) + a_range[0] # range for amplitude
+a1_range = [0, 1]
+a1 = np.random.rand(samplerate) * (a1_range[1]-a1_range[0]) + a1_range[0] # range for amplitude
 
-b_range = [2000, 4000]
-b = np.random.rand(samplerate) *(b_range[1]-b_range[0]) + b_range[0] # range for frequency
-b = np.round(b)
-b = b.astype(int)
+# Arm A
+b1_range = [2000, 4000]
+b1 = np.random.rand(samplerate) *(b1_range[1]-b1_range[0]) + b1_range[0] # range for frequency
+b1 = np.round(b1)
+b1 = b1.astype(int)
 
-b[0] = 0
+b1[0] = 0
 
-for i in range(1,np.size(b)):
-    b[i] = b[i-1]+b[i]
+for i in range(1,np.size(b1)):
+    b1[i] = b1[i-1]+b1[i]
 
 i=0
 random_signal = np.zeros(samplerate, dtype=complex)
-while b[i]<np.size(random_signal):
-    k = b[i]
-    random_signal[k:] = a[i]
+while b1[i]<np.size(random_signal):
+    k = b1[i]
+    random_signal[k:] = a1[i]
     i=i+1
 
-a = np.zeros(samplerate)
+a1 = np.zeros(samplerate, dtype=complex)
 j = 0
 while j < samplerate:
-    a[j] = amp_prbs
-    a[j+1] = 0
+    a1[j] = amp_prbs
+    a1[j+1] = 0
     j = j+2
 
 i=0
 prbs1 = np.zeros(samplerate, dtype=complex)
-while b[i]<np.size(prbs1):
-    k = b[i]
-    prbs1[k:] = a[i]
+while b1[i]<np.size(prbs1):
+    k = b1[i]
+    prbs1[k:] = a1[i]
     i=i+1
 
-#-----
+# Arm B
 
 b2_range = [4000, 6000]
 b2 = np.random.rand(samplerate) *(b2_range[1]-b2_range[0]) + b2_range[0] # range for frequency
@@ -96,9 +96,9 @@ for i in range(1,np.size(b2)):
 
 i=0
 random_signal2 = np.zeros(samplerate, dtype=complex)
-while b[i]<np.size(random_signal2):
+while b2[i]<np.size(random_signal2):
     k = b2[i]
-    random_signal2[k:] = a[i]
+    random_signal2[k:] = a1[i]
     i=i+1
 
 a2 = np.zeros(samplerate, dtype=complex)
@@ -137,8 +137,8 @@ signal2col = prbs2
 
 
 #
-oplcommon1=0 #Common Path Length 1
-oplcommon2=0 #Common Path Length 2
+oplcommon1 = 0 * np.pi #Common Path Length 1
+oplcommon2 = 0 * np.pi #Common Path Length 2
 
 #opl1 =100 
 #opl2= 100
@@ -164,8 +164,8 @@ IPB2 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
 # Define Input Electric Field
 
 # Input: Port 1 only
-#E1in = np.array([[1+0.00j],[0-0.00j]])
-E1in = np.array([[0.707+0.707j],[0]])
+E1in = np.array([[1+0.00j],[0-0.00j]])
+#E1in = np.array([[0.707+0.707j],[0]])
 
 # Input Both 1 and 2 port
 #Ein1 = np.array([[1+0j],[1-0j]]) 
@@ -175,6 +175,9 @@ E1in = np.array([[0.707+0.707j],[0]])
 # Input Port 2 only
 #Ein1 = np.array([[0],[1]]) 
 #Ein1 = np.array([[0],[0.707+0.707j]])
+
+E6out_p1_col = np.zeros(samplerate, dtype=complex)
+E6out_p2_col = np.zeros(samplerate, dtype=complex)
 
 E7out_p1_col = np.zeros(samplerate, dtype=complex)
 E7out_p2_col = np.zeros(samplerate, dtype=complex)
@@ -213,6 +216,9 @@ for ii in range(samplerate):
 
     E6_1out = mach_zender_interferometer_time_def.propagate1(opl1, opl1, E6_1in) # no delay for arm A
 
+    E6out_port1 = E6_1out[1,0] #trans
+    E6out_p1_col[ii] = E6out_port1 
+
 
     #Arm 2
 
@@ -231,23 +237,27 @@ for ii in range(samplerate):
     E6_2in = E5_2out
 
     E6_2out = mach_zender_interferometer_time_def.propagate1(opl1+IPB1, opl1+IPB1, E6_2in) # Delay for arm B. Actually only one path couple to fourth beam splitter
-    
+
+    E6out_port2 = E6_2out[1,0] #trans
+    E6out_p2_col[ii] = E6out_port2
+
+
     # Combine I + Q using fourth beam splitter
 
-    E7_in = np.array([[E6_1out[0,0]], [E6_2out[0,0]]])
+    E7_in = np.array([[E6_1out[1,0]], [E6_2out[1,0]]])
 
     E7_out = mach_zender_interferometer_time_def.beamsplitter(PT4, E7_in) # Each path enter fourth beam splitter
     
     #print(E7_out)
     #print("")
 
-    E7out_port1 = E7_out[0,0] #trans
+    E7out_port1 = E7_out[1,0] #trans
     E7out_p1_col[ii] = E7out_port1 
 
     #print(E7out_port1)
     #print("")
 
-    E7out_port2 = E7_out[1,0] #reflect
+    E7out_port2 = E7_out[0,0] #reflect
     E7out_p2_col[ii] = E7out_port2
 
 
@@ -262,20 +272,20 @@ for ii in range(samplerate):
     E8_out = mach_zender_interferometer_time_def.beamsplitter(PT5, E8_in) # Each path enter fifth beam splitter   
     
     #Local Oscillator
-    losc_I_phase = 2*np.pi * freq1 * t
+    losc_I_phase = 0 * np.pi
     losc_Q_phase = losc_I_phase + IPB2
 
-    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.1+0.0j],[0-0.0j]]))
+    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.2+0.0j],[0.2-0.0j]]))
     # Actually only one path couple to fourth beam splitter
     # 
-    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.1+0.0j],[0-0.0j]]))
+    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.2+0.0j],[0.2-0.0j]]))
 
-    E9_1in = np.array([[E8_out[0,0]], [Elosc_I[1,0]]])
+    E9_1in = np.array([[E8_out[0,0]], [Elosc_I[0,0]]])
 
     #print(E9_1in)
     #print("")
 
-    E9_2in = np.array([[E8_out[1,0]], [Elosc_Q[1,0]]])
+    E9_2in = np.array([[E8_out[1,0]], [Elosc_Q[0,0]]])
 
     #print(E9_2in)
     #print("")
@@ -307,29 +317,33 @@ ax1.plot(tcol,signal1col, "-", color="c")
 #ax1.set_ylim(-1*np.pi,np.pi)
 ax1.grid()
 
+ax2.plot(tcol,np.real(E6out_p1_col), "-",color="c")
 
-ax2.plot(tcol,signal2col, "-",color="y")
+ax3.plot(tcol,signal2col, "-",color="y")
 #ax2.set_ylim(-1*np.pi,np.pi)
 #ax2.set_ylabel("Power")
-ax2.grid()
-
-ax3.plot(tcol,np.real(E7out_p1_col), "-",color="c")
-ax3.set_ylim(-1.1,1.1)
-ax3.set_ylabel("Electric Field")
 ax3.grid()
 
-ax4.plot(tcol,(np.abs(E7out_p1_col))**2, "-",color="c")
-ax4.set_ylim(-0.1,1.1)
-ax4.set_ylabel("Power")
-ax4.grid()
+ax4.plot(tcol,np.real(E6out_p2_col), "-",color="y")
+ax4.set_ylabel("Electric Field")
+
+#ax3.plot(tcol,np.real(E7out_p1_col), "-",color="c")
+#ax3.set_ylim(-1.1,1.1)
+#ax3.set_ylabel("Electric Field")
+#ax3.grid()
+
+#ax4.plot(tcol,(np.abs(E7out_p1_col))**2, "-",color="c")
+#ax4.set_ylim(-0.1,1.1)
+#ax4.set_ylabel("Power")
+#ax4.grid()
 
 
-ax5.plot(tcol,np.real(E7out_p2_col), "-",color="m")
+ax5.plot(tcol,np.real(E7out_p1_col), "-",color="m")
 ax5.set_ylim(-1.1,1.1)
 ax5.set_ylabel("Electric Field")
 ax5.grid()
 
-ax6.plot(tcol,(np.abs(E7out_p2_col))**2, "-",color="m")
+ax6.plot(tcol,(np.abs(E7out_p1_col))**2, "-",color="m")
 ax6.set_ylim(-0.1,1.1)
 ax6.set_ylabel("Power")
 ax6.grid()
@@ -349,7 +363,7 @@ ax21.set_ylim(-0.6,0.6)
 ax21.grid()
 
 ax22.plot(tcol, (np.abs(E9out_p1_col))**2, "-",color="c")
-#ax22.set_ylim(-1.1,1.1)
+ax22.set_ylim(-0.1,0.6)
 ax22.grid()
 
 
@@ -358,7 +372,7 @@ ax23.set_ylim(-0.6,0.6)
 ax23.grid()
 
 ax24.plot(tcol, (np.abs(E9out_p2_col))**2, "-",color="m")
-#ax24.set_ylim(-1.1,1.1)
+ax24.set_ylim(-0.1,0.6)
 ax24.grid()
 
 
