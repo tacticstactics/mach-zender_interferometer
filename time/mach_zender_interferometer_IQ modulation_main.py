@@ -12,7 +12,7 @@ print('')
 wl1 = 1550e-9
 freq1 = c / wl1
 
-samplerate = 8*8192 # NUmber of Points
+samplerate = 4*8192 # NUmber of Points
 stept = 0.002 * 1e-15 #[s]
 tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
 
@@ -22,7 +22,6 @@ dc_offset = 0.5*np.pi # DC offset
 
 amp_cosine = 0.5*np.pi
 freq_cosine1 = 1e12 # [Hz]
-
 
 
 #sinesignal
@@ -127,13 +126,13 @@ while b2[i]<np.size(prbs2):
 #signal1col = sine_signalcol
 #signal1col = random_signal
 signal1col = prbs1
-#signal1col = np.zeros(samplerate)
+#signal1col = np.zeros(samplerate, dtype=complex)
 #signal1col = randomintcol
 
 #signal2col = sine_signalcol
 #signal2col = random_signal
 signal2col = prbs2
-#signal2col = np.zeros(samplerate)
+#signal2col = np.zeros(samplerate, dtype=complex)
 
 
 #
@@ -158,8 +157,8 @@ PT5 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_1 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_2 = 0.5 # PT: Power Transmission of 5th beam splitter
 
-IPB1 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
-IPB2 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB1 = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB2 = -1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
 
 # Define Input Electric Field
 
@@ -216,7 +215,7 @@ for ii in range(samplerate):
 
     E6_1out = mach_zender_interferometer_time_def.propagate1(opl1, opl1, E6_1in) # no delay for arm A
 
-    E6out_port1 = E6_1out[1,0] #trans
+    E6out_port1 = E6_1out[0,0] #trans
     E6out_p1_col[ii] = E6out_port1 
 
 
@@ -238,26 +237,26 @@ for ii in range(samplerate):
 
     E6_2out = mach_zender_interferometer_time_def.propagate1(opl1+IPB1, opl1+IPB1, E6_2in) # Delay for arm B. Actually only one path couple to fourth beam splitter
 
-    E6out_port2 = E6_2out[1,0] #trans
+    E6out_port2 = E6_2out[0,0] #trans
     E6out_p2_col[ii] = E6out_port2
 
 
     # Combine I + Q using fourth beam splitter
 
-    E7_in = np.array([[E6_1out[1,0]], [E6_2out[1,0]]])
+    E7_in = np.array([[E6_1out[0,0]], [E6_2out[0,0]]])
 
     E7_out = mach_zender_interferometer_time_def.beamsplitter(PT4, E7_in) # Each path enter fourth beam splitter
     
     #print(E7_out)
     #print("")
 
-    E7out_port1 = E7_out[1,0] #trans
+    E7out_port1 = E7_out[0,0] #trans
     E7out_p1_col[ii] = E7out_port1 
 
     #print(E7out_port1)
     #print("")
 
-    E7out_port2 = E7_out[0,0] #reflect
+    E7out_port2 = E7_out[1,0] #reflect
     E7out_p2_col[ii] = E7out_port2
 
 
@@ -272,20 +271,20 @@ for ii in range(samplerate):
     E8_out = mach_zender_interferometer_time_def.beamsplitter(PT5, E8_in) # Each path enter fifth beam splitter   
     
     #Local Oscillator
-    losc_I_phase = 0 * np.pi
+    losc_I_phase = 2*np.pi * freq1 * t
     losc_Q_phase = losc_I_phase + IPB2
 
-    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.2+0.0j],[0.2-0.0j]]))
+    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.05+0.0j],[0.0-0.0j]]))
     # Actually only one path couple to fourth beam splitter
     # 
-    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.2+0.0j],[0.2-0.0j]]))
+    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.05+0.0j],[0.0-0.0j]]))
 
-    E9_1in = np.array([[E8_out[0,0]], [Elosc_I[0,0]]])
+    E9_1in = np.array([[E8_out[0,0]], [Elosc_Q[0,0]]])
 
     #print(E9_1in)
     #print("")
 
-    E9_2in = np.array([[E8_out[1,0]], [Elosc_Q[0,0]]])
+    E9_2in = np.array([[E8_out[1,0]], [Elosc_I[0,0]]])
 
     #print(E9_2in)
     #print("")
@@ -359,7 +358,6 @@ ax24 = fig2.add_subplot(4, 1, 4)
 
 ax21.plot(tcol, np.real(E9out_p1_col), "-",color="c")
 #ax21.set_ylim(-1.1,1.1)
-ax21.set_ylim(-0.6,0.6)
 ax21.grid()
 
 ax22.plot(tcol, (np.abs(E9out_p1_col))**2, "-",color="c")
@@ -368,7 +366,7 @@ ax22.grid()
 
 
 ax23.plot(tcol, np.real(E9out_p2_col), "-",color="m")
-ax23.set_ylim(-0.6,0.6)
+#ax23.set_ylim(-0.6,0.6)
 ax23.grid()
 
 ax24.plot(tcol, (np.abs(E9out_p2_col))**2, "-",color="m")
