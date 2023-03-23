@@ -136,8 +136,8 @@ signal2col = prbs2
 
 
 #
-oplcommon1 = 0 * np.pi #Common Path Length 1
-oplcommon2 = 0 * np.pi #Common Path Length 2
+oplcommon1 = 0.5 * np.pi #Common Path Length 1
+oplcommon2 = 0.5 * np.pi #Common Path Length 2
 
 #opl1 =100 
 #opl2= 100
@@ -157,8 +157,8 @@ PT5 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_1 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_2 = 0.5 # PT: Power Transmission of 5th beam splitter
 
-IPB1 = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
-IPB2 = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB1 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB2 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
 
 # Define Input Electric Field
 
@@ -181,8 +181,11 @@ E6out_p2_col = np.zeros(samplerate, dtype=complex)
 E7out_p1_col = np.zeros(samplerate, dtype=complex)
 E7out_p2_col = np.zeros(samplerate, dtype=complex)
 
-E9out_p1_col = np.zeros(samplerate, dtype=complex)
-E9out_p2_col = np.zeros(samplerate, dtype=complex)
+E9_1out_port1col= np.zeros(samplerate, dtype=complex)
+E9_1out_port2col= np.zeros(samplerate, dtype=complex)
+
+E9_2out_port1col= np.zeros(samplerate, dtype=complex)
+E9_2out_port2col= np.zeros(samplerate, dtype=complex)
 
 #Tx
 
@@ -293,12 +296,18 @@ for ii in range(samplerate):
     
     E9_2out = mach_zender_interferometer_time_def.beamsplitter(PT6_2, E9_2in) # Each path enter sixth beam splitter
 
-    E9_1out_port1 = E9_1out[1,0] #trans
-    E9out_p1_col[ii] = E9_1out_port1
+    E9_1out_port1 = E9_1out[0,0] #trans
+    E9_1out_port1col[ii] = E9_1out_port1
 
-    E9_2out_port2 = E9_2out[1,0] #trans
-    E9out_p2_col[ii] = E9_2out_port2
+    E9_1out_port2 = E9_1out[1,0] #Reflect
+    E9_1out_port2col[ii] = E9_1out_port2
 
+
+    E9_2out_port1 = E9_2out[0,0] #trans
+    E9_2out_port1col[ii] = E9_2out_port1
+
+    E9_2out_port2 = E9_2out[1,0] #Reflect
+    E9_2out_port2col[ii] = E9_2out_port2
 
 
 
@@ -355,21 +364,21 @@ ax22 = fig2.add_subplot(4, 1, 2)
 ax23 = fig2.add_subplot(4, 1, 3)
 ax24 = fig2.add_subplot(4, 1, 4)
 
-ax21.plot(tcol, np.real(E9out_p1_col), "-",color="c")
+ax21.plot(tcol, np.real(E9_1out_port1col), "-",color="c")
 #ax21.set_ylim(-1.1,1.1)
 ax21.grid()
 
-ax22.plot(tcol, (np.abs(E9out_p1_col))**2, "-",color="c")
-ax22.set_ylim(-0.1,0.3)
+ax22.plot(tcol, (np.abs(E9_1out_port1col))**2 - (np.abs(E9_1out_port2col))**2, "-",color="c")
+ax22.set_ylim(-0.5,0.5)
 ax22.grid()
 
 
-ax23.plot(tcol, np.real(E9out_p2_col), "-",color="m")
+ax23.plot(tcol, np.real(E9_2out_port1col), "-",color="m")
 #ax23.set_ylim(-0.6,0.6)
 ax23.grid()
 
-ax24.plot(tcol, (np.abs(E9out_p2_col))**2, "-",color="m")
-ax24.set_ylim(-0.1,0.3)
+ax24.plot(tcol, (np.abs(E9_2out_port1col))**2 - (np.abs(E9_2out_port2col))**2, "-",color="m")
+ax24.set_ylim(-0.5,0.5)
 ax24.grid()
 
 
