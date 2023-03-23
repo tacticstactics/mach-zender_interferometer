@@ -50,7 +50,7 @@ a1_range = [0, 1]
 a1 = np.random.rand(samplerate) * (a1_range[1]-a1_range[0]) + a1_range[0] # range for amplitude
 
 # Arm A
-b1_range = [2000, 4000]
+b1_range = [1000, 2000]
 b1 = np.random.rand(samplerate) *(b1_range[1]-b1_range[0]) + b1_range[0] # range for frequency
 b1 = np.round(b1)
 b1 = b1.astype(int)
@@ -83,7 +83,7 @@ while b1[i]<np.size(prbs1):
 
 # Arm B
 
-b2_range = [4000, 6000]
+b2_range = [3000, 5000]
 b2 = np.random.rand(samplerate) *(b2_range[1]-b2_range[0]) + b2_range[0] # range for frequency
 b2 = np.round(b2)
 b2 = b2.astype(int)
@@ -132,7 +132,7 @@ signal1col = prbs1
 #signal2col = sine_signalcol
 #signal2col = random_signal
 signal2col = prbs2
-#signal2col = np.zeros(samplerate, dtype=complex)
+#signal2col = -1*np.pi*np.ones(samplerate, dtype=complex)
 
 
 #
@@ -157,8 +157,8 @@ PT5 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_1 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_2 = 0.5 # PT: Power Transmission of 5th beam splitter
 
-IPB1 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
-IPB2 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB1 = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB2 = 1 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
 
 # Define Input Electric Field
 
@@ -187,10 +187,11 @@ E9out_p2_col = np.zeros(samplerate, dtype=complex)
 #Tx
 
 for ii in range(samplerate):
-        
+
     t = tcol[ii]
-    
-    E1out = mach_zender_interferometer_time_def.propagate1(oplcommon1, oplcommon2, E1in)
+    opl1 = 2*np.pi * freq1 * t
+
+    E1out = mach_zender_interferometer_time_def.propagate1(opl1, opl1, E1in)
     E2in = E1out
     
     E2out = mach_zender_interferometer_time_def.beamsplitter(PT1, E2in)
@@ -200,20 +201,18 @@ for ii in range(samplerate):
 
     E3_1out = mach_zender_interferometer_time_def.beamsplitter(PT2_1, E3_1in)  
 
-    E4_1in = E3_1out
-    
-    opl1 = 2*np.pi * freq1 * t
+    E4_1in = E3_1out       
 
     signal1 = signal1col[ii]  
 
 
-    E4_1out = mach_zender_interferometer_time_def.propagate1(opl1, opl1+signal1, E4_1in) # Each path experience different path length
+    E4_1out = mach_zender_interferometer_time_def.propagate1(oplcommon1, oplcommon1+signal1, E4_1in) # Each path experience different path length
     E5_1in = E4_1out
     
     E5_1out = mach_zender_interferometer_time_def.beamsplitter(PT3_1, E5_1in) # Each path enter second beam splitter
     E6_1in = E5_1out
 
-    E6_1out = mach_zender_interferometer_time_def.propagate1(opl1, opl1, E6_1in) # no delay for arm A
+    E6_1out = mach_zender_interferometer_time_def.propagate1(oplcommon1, oplcommon1, E6_1in) # no delay for arm A
 
     E6out_port1 = E6_1out[0,0] #trans
     E6out_p1_col[ii] = E6out_port1 
@@ -229,13 +228,13 @@ for ii in range(samplerate):
  
     signal2 = signal2col[ii]        
 
-    E4_2out = mach_zender_interferometer_time_def.propagate1(opl1, opl1+signal2, E4_2in) # Each path experience different path length
+    E4_2out = mach_zender_interferometer_time_def.propagate1(oplcommon1, oplcommon1+signal2, E4_2in) # Each path experience different path length
     E5_2in = E4_2out
 
     E5_2out = mach_zender_interferometer_time_def.beamsplitter(PT3_2, E5_2in) # Each path enter second beam splitter
     E6_2in = E5_2out
 
-    E6_2out = mach_zender_interferometer_time_def.propagate1(opl1+IPB1, opl1+IPB1, E6_2in) # Delay for arm B. Actually only one path couple to fourth beam splitter
+    E6_2out = mach_zender_interferometer_time_def.propagate1(oplcommon1+IPB1, oplcommon1+IPB1, E6_2in) # Delay for arm B. Actually only one path couple to fourth beam splitter
 
     E6out_port2 = E6_2out[0,0] #trans
     E6out_p2_col[ii] = E6out_port2
@@ -271,20 +270,20 @@ for ii in range(samplerate):
     E8_out = mach_zender_interferometer_time_def.beamsplitter(PT5, E8_in) # Each path enter fifth beam splitter   
     
     #Local Oscillator
-    losc_I_phase = 2*np.pi * freq1 * t
+    losc_I_phase = oplcommon1
     losc_Q_phase = losc_I_phase + IPB2
 
-    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.0+0.0j],[0.0-0.0j]]))
+    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.25+0.0j],[0.25-0.0j]]))
     # Actually only one path couple to fourth beam splitter
     # 
-    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.0+0.0j],[0.0-0.0j]]))
+    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.25+0.0j],[0.25-0.0j]]))
 
-    E9_1in = np.array([[E8_out[0,0]], [Elosc_Q[0,0]]])
+    E9_1in = np.array([[E8_out[0,0]], [Elosc_I[0,0]]])
 
     #print(E9_1in)
     #print("")
 
-    E9_2in = np.array([[E8_out[1,0]], [Elosc_I[0,0]]])
+    E9_2in = np.array([[E8_out[1,0]], [Elosc_Q[0,0]]])
 
     #print(E9_2in)
     #print("")
