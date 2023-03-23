@@ -125,19 +125,19 @@ while b2[i]<np.size(prbs2):
 #signal1col = cosine_signalcol
 #signal1col = sine_signalcol
 #signal1col = random_signal
-signal1col = prbs1
+signal1col = prbs2
 #signal1col = np.zeros(samplerate, dtype=complex)
 #signal1col = randomintcol
 
 #signal2col = sine_signalcol
 #signal2col = random_signal
-signal2col = prbs2
+signal2col = prbs1
 #signal2col = -1*np.pi*np.ones(samplerate, dtype=complex)
 
 
 #
-oplcommon1 = 0.5 * np.pi #Common Path Length 1
-oplcommon2 = 0.5 * np.pi #Common Path Length 2
+oplcommon1 = 0 * np.pi #Common Path Length 1
+oplcommon2 = 0 * np.pi #Common Path Length 2
 
 #opl1 =100 
 #opl2= 100
@@ -158,7 +158,7 @@ PT6_1 = 0.5 # PT: Power Transmission of 5th beam splitter
 PT6_2 = 0.5 # PT: Power Transmission of 5th beam splitter
 
 IPB1 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
-IPB2 = 0.5 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
+IPB2 = 0 * np.pi #In Phase Bias: Optical Phase delay between Arm A and B
 
 # Define Input Electric Field
 
@@ -273,13 +273,13 @@ for ii in range(samplerate):
     E8_out = mach_zender_interferometer_time_def.beamsplitter(PT5, E8_in) # Each path enter fifth beam splitter   
     
     #Local Oscillator
-    losc_I_phase = oplcommon1
+    losc_I_phase = opl1
     losc_Q_phase = losc_I_phase + IPB2
 
-    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.25+0.0j],[0.25-0.0j]]))
+    Elosc_I = mach_zender_interferometer_time_def.propagate1(losc_I_phase, losc_I_phase, np.array([[0.25+0.0j],[0.0-0.0j]]))
     # Actually only one path couple to fourth beam splitter
     # 
-    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.25+0.0j],[0.25-0.0j]]))
+    Elosc_Q = mach_zender_interferometer_time_def.propagate1(losc_Q_phase, losc_Q_phase, np.array([[0.25+0.0j],[0.0-0.0j]]))
 
     E9_1in = np.array([[E8_out[0,0]], [Elosc_I[0,0]]])
 

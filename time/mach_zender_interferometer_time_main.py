@@ -115,9 +115,9 @@ Ein1 = np.array([[1+0.0000j],[0-0.0000j]])
 #Ein1 = np.array([[0],[0.707+0.707j]])
 
 
-P1_powercol = np.zeros(samplerate, dtype=complex)
+P1_powercol = np.zeros(samplerate)
 
-P2_powercol = np.zeros(samplerate, dtype=complex)
+P2_powercol = np.zeros(samplerate)
 
 Eout_port1col = np.zeros(samplerate, dtype=complex)
 Eout_port2col = np.zeros(samplerate, dtype=complex)
@@ -134,7 +134,7 @@ for ii in range(samplerate):
     Ein3 = Eout2
     
     phase1 = 2*np.pi * freq1 * t # phase of local oscillator [rad]
-    phase2 = 2*np.pi * freq1 * t + signal #[rad]
+    phase2 = phase1 + signal #[rad]
 
     Eout3 = mach_zender_interferometer_time_def.propagate1(phase1, phase2, Ein3) # Each path experience different path length
     Ein4 = Eout3
