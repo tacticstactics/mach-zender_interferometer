@@ -52,7 +52,8 @@ for ii in range(samplerate):
 
 
 
-# Random_signal generation
+
+# Pseudo Random multilevel Digital signal, type 1
 
 a_range = [0, 1]
 a = np.random.rand(samplerate) * (a_range[1]-a_range[0]) + a_range[0] # range for amplitude
@@ -75,7 +76,7 @@ while b[i]<np.size(random_signal):
     i=i+1
 
 
-# prbs----
+# Pseudo Random multilevel Digital signal, type 1
 
 a = np.zeros(samplerate)
 j = 0
@@ -92,12 +93,22 @@ while b[i]<np.size(prbs1):
     i=i+1
 #----
 
+amp_prbs = 1
+# Pseudo Random multilevel Digital signal, type 2
+numberofpointspersinal = 2 ** 6
+repetitions1 = samplerate / numberofpointspersinal
+
+rand_int1 = np.random.randint(0, 4, numberofpointspersinal) # 0 or 1
+prbs2 = amp_prbs * np.repeat(rand_int1, repetitions1)
+#prbs2 = np.repeat([0,1,0,1,1,0,1,0], repetitions1)
+
+
 # Select signal source
 
 #signalcol = sine_signalcol
 #signalcol = random_signal
-signalcol = prbs1
-
+#signalcol = prbs1
+signalcol = prbs2
 
 #Define Input condition
 
