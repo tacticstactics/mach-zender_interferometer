@@ -9,7 +9,7 @@ print('')
 print('mach-zender_interferometer_IQ modulation_main.py')
 print('')
 
-wl1 = 1550e-9
+wl1 = 1550e-10
 freq1 = c / wl1
 
 samplerate = 4*8192 # NUmber of Points
@@ -17,11 +17,11 @@ stept = 0.002 * 1e-15 #[s]
 tcol = np.linspace(0.0, stept * samplerate, samplerate, endpoint=False)
 
 amp_sine = 0.5*np.pi
-freq_sine1 = 1e12 # [Hz]
+freq_sine1 = 50e12 # [Hz]
 dc_offset = 0.5*np.pi # DC offset
 
 amp_cosine = 0.5*np.pi
-freq_cosine1 = 1e12 # [Hz]
+freq_cosine1 = 100e12 # [Hz]
 
 
 #sinesignal
@@ -61,10 +61,10 @@ for i in range(1,np.size(b1)):
     b1[i] = b1[i-1]+b1[i]
 
 i=0
-random_signal = np.zeros(samplerate, dtype=complex)
-while b1[i]<np.size(random_signal):
+random_signal1 = np.zeros(samplerate, dtype=complex)
+while b1[i]<np.size(random_signal1):
     k = b1[i]
-    random_signal[k:] = a1[i]
+    random_signal1[k:] = a1[i]
     i=i+1
 
 a1 = np.zeros(samplerate, dtype=complex)
@@ -121,17 +121,16 @@ while b2[i]<np.size(prbs2):
 #for ii in range(samplerate):
 #    randomintcol[ii] = np.random.random_integers(2)
 
-
-#signal1col = cosine_signalcol
 #signal1col = sine_signalcol
-#signal1col = random_signal
-signal1col = prbs2
+#signal1col = cosine_signalcol
+#signal1col = random_signal1
+signal1col = prbs1
 #signal1col = np.zeros(samplerate, dtype=complex)
 #signal1col = randomintcol
 
-#signal2col = sine_signalcol
-#signal2col = random_signal
-signal2col = prbs1
+#signal2col = cosine_signalcol
+#signal2col = random_signal2
+signal2col = prbs2
 #signal2col = -1*np.pi*np.ones(samplerate, dtype=complex)
 
 
@@ -369,7 +368,7 @@ ax21.plot(tcol, np.real(E9_1out_port1col), "-",color="c")
 ax21.grid()
 
 ax22.plot(tcol, (np.abs(E9_1out_port1col))**2 - (np.abs(E9_1out_port2col))**2, "-",color="c")
-ax22.set_ylim(-0.5,0.5)
+#ax22.set_ylim(-0.5,0.5)
 ax22.grid()
 
 
@@ -378,7 +377,7 @@ ax23.plot(tcol, np.real(E9_2out_port1col), "-",color="m")
 ax23.grid()
 
 ax24.plot(tcol, (np.abs(E9_2out_port1col))**2 - (np.abs(E9_2out_port2col))**2, "-",color="m")
-ax24.set_ylim(-0.5,0.5)
+#ax24.set_ylim(-0.5,0.5)
 ax24.grid()
 
 
