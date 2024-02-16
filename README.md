@@ -1,4 +1,4 @@
-# mach-zender_interferometer_py
+# mach-zender_interferometer
 
 Mach Zender Interferometer is a device used to determine the relative phase shift variations between two collimated beams derived by splitting light from a single source. It consists of two beam splitter and two mirrors.
 
